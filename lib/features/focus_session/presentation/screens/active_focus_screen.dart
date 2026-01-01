@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/widgets/circular_focus_timer.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
-import '../../../core/theme/app_spacing.dart';
-import '../../../core/theme/app_motion.dart';
-import '../../focus_session/presentation/providers/session_controller.dart';
-import '../../focus_session/domain/entities/focus_session.dart';
+import '../../../../core/widgets/circular_focus_timer.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../providers/session_controller.dart';
+import '../../domain/entities/focus_session.dart';
 import '../widgets/distraction_warning_overlay.dart';
-import 'break_screen.dart';
 import 'session_completion_screen.dart';
-import '../models/session_config.dart';
 
 /// Fullscreen active focus session screen
 ///
@@ -28,7 +25,6 @@ class ActiveFocusScreen extends ConsumerStatefulWidget {
 }
 
 class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen> {
-  bool _showPauseOverlay = false;
   bool _showWarning = false;
   int _lastWarningCount = 0;
   SessionStatus? _lastSessionStatus;

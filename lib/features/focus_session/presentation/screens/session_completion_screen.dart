@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../focus_session/domain/entities/focus_session.dart';
+import '../../domain/entities/focus_session.dart';
 import '../widgets/celebration_confetti.dart';
 import '../providers/session_controller.dart';
 import 'break_screen.dart';
@@ -37,22 +37,17 @@ class _SessionCompletionScreenState
   late Animation<double> _scaleAnimation;
 
   // Pre-calculated values to avoid recomputation during animation
-  late final double _focusQuality;
-  late final Color _qualityColor;
-  late final IconData _qualityIcon;
-  late final String _encouragingMessage;
-  late final String _detailedFeedback;
 
   @override
   void initState() {
     super.initState();
 
     // Calculate quality metrics once
-    _focusQuality = _calculateFocusQuality();
-    _qualityColor = _getQualityColor();
-    _qualityIcon = _getQualityIcon();
-    _encouragingMessage = _getEncouragingMessage();
-    _detailedFeedback = _getDetailedFeedback();
+    // final focusQuality = _calculateFocusQuality();
+    // final qualityColor = _getQualityColor();
+    // final qualityIcon = _getQualityIcon();
+    // final encouragingMessage = _getEncouragingMessage();
+    // final detailedFeedback = _getDetailedFeedback();
 
     _controller = AnimationController(
       duration: const Duration(milliseconds: 800),
@@ -179,11 +174,11 @@ class _SessionCompletionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final minutes = widget.session.totalDuration.inMinutes;
-    final seconds = widget.session.totalDuration.inSeconds % 60;
-    final durationText = seconds > 0
-        ? '$minutes min $seconds sec'
-        : '$minutes min';
+    // final minutes = widget.session.totalDuration.inMinutes;
+    // final seconds = widget.session.totalDuration.inSeconds % 60;
+    // final durationText = seconds > 0
+    //     ? '$minutes min $seconds sec'
+    //     : '$minutes min';
 
     return Scaffold(
       backgroundColor: AppColors.slate950,

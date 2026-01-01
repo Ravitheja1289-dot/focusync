@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// Clean, minimal settings screen
 ///
@@ -24,14 +24,16 @@ class SettingsScreen extends StatelessWidget {
               pinned: true,
               title: Text(
                 'Settings',
-                style: AppTypography.h2.copyWith(color: AppColors.white),
+                style: AppTextStyles.titleLarge.copyWith(
+                  color: AppColors.white,
+                ),
               ),
               automaticallyImplyLeading: false,
             ),
 
             // Content - each section is independent to prevent rebuilds
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.md,
                 vertical: AppSpacing.sm,
               ),
@@ -269,18 +271,20 @@ class _DataControlsSectionState extends State<_DataControlsSection> {
         ),
         title: Text(
           'Export Data',
-          style: AppTypography.h3.copyWith(color: AppColors.white),
+          style: AppTextStyles.titleMedium.copyWith(color: AppColors.white),
         ),
         content: Text(
           'Your focus history will be exported as a JSON file. This file contains all your session data and can be imported later.',
-          style: AppTypography.body.copyWith(color: AppColors.gray300),
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray300),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel',
-              style: AppTypography.body.copyWith(color: AppColors.gray400),
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.gray400,
+              ),
             ),
           ),
           TextButton(
@@ -291,7 +295,9 @@ class _DataControlsSectionState extends State<_DataControlsSection> {
                 SnackBar(
                   content: Text(
                     'Export functionality coming soon',
-                    style: AppTypography.body.copyWith(color: AppColors.white),
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.white,
+                    ),
                   ),
                   backgroundColor: AppColors.slate800,
                 ),
@@ -299,7 +305,9 @@ class _DataControlsSectionState extends State<_DataControlsSection> {
             },
             child: Text(
               'Export',
-              style: AppTypography.body.copyWith(color: AppColors.indigo400),
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.indigo400,
+              ),
             ),
           ),
         ],
@@ -318,18 +326,20 @@ class _DataControlsSectionState extends State<_DataControlsSection> {
         ),
         title: Text(
           'Clear All Data',
-          style: AppTypography.h3.copyWith(color: AppColors.red400),
+          style: AppTextStyles.titleMedium.copyWith(color: AppColors.red400),
         ),
         content: Text(
           'This will permanently delete all your focus sessions, analytics, and settings. This action cannot be undone.',
-          style: AppTypography.body.copyWith(color: AppColors.gray300),
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray300),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel',
-              style: AppTypography.body.copyWith(color: AppColors.gray400),
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.gray400,
+              ),
             ),
           ),
           TextButton(
@@ -340,7 +350,9 @@ class _DataControlsSectionState extends State<_DataControlsSection> {
                 SnackBar(
                   content: Text(
                     'Data cleared successfully',
-                    style: AppTypography.body.copyWith(color: AppColors.white),
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.white,
+                    ),
                   ),
                   backgroundColor: AppColors.slate800,
                 ),
@@ -348,7 +360,7 @@ class _DataControlsSectionState extends State<_DataControlsSection> {
             },
             child: Text(
               'Delete',
-              style: AppTypography.body.copyWith(color: AppColors.red400),
+              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.red400),
             ),
           ),
         ],
@@ -423,7 +435,7 @@ class _SettingsHeader extends StatelessWidget {
       ),
       child: Text(
         title.toUpperCase(),
-        style: AppTypography.caption.copyWith(
+        style: AppTextStyles.bodySmall.copyWith(
           color: AppColors.gray500,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
@@ -477,7 +489,7 @@ class _ToggleSetting extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: AppTypography.body.copyWith(
+          style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.white,
             fontWeight: FontWeight.w500,
           ),
@@ -486,13 +498,13 @@ class _ToggleSetting extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4),
           child: Text(
             subtitle,
-            style: AppTypography.caption.copyWith(color: AppColors.gray400),
+            style: AppTextStyles.bodySmall.copyWith(color: AppColors.gray400),
           ),
         ),
         trailing: Switch(
           value: value,
           onChanged: enabled ? onChanged : null,
-          activeColor: AppColors.indigo500,
+          activeThumbColor: AppColors.indigo500,
           activeTrackColor: AppColors.indigo500.withOpacity(0.3),
           inactiveThumbColor: AppColors.gray400,
           inactiveTrackColor: AppColors.slate700,
@@ -528,7 +540,7 @@ class _NavigationSetting extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: AppTypography.body.copyWith(
+          style: AppTextStyles.bodyMedium.copyWith(
             color: destructive ? AppColors.red400 : AppColors.white,
             fontWeight: FontWeight.w500,
           ),
@@ -537,9 +549,9 @@ class _NavigationSetting extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4),
           child: Text(
             subtitle,
-            style: AppTypography.caption.copyWith(
+            style: AppTextStyles.bodySmall.copyWith(
               color: destructive
-                  ? AppColors.red300.withOpacity(0.7)
+                  ? AppColors.red400.withOpacity(0.7)
                   : AppColors.gray400,
             ),
           ),

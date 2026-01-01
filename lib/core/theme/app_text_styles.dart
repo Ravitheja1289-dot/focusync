@@ -1,58 +1,63 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
-/// Focusync typography system
+/// Focusync minimal typography system
 ///
-/// Uses Inter for body/UI and SF Pro Rounded for display text.
-/// iOS baseline sizing with precise line heights and letter spacing.
+/// Single font family: Inter (neutral, calm, professional)
+/// Weight variation creates hierarchy, not font changes
+/// Line heights optimized for reading comfort and visual calm
+/// No decorative fonts - every style serves a functional purpose
 class AppTextStyles {
   AppTextStyles._();
 
   // ============================================================================
-  // FONT FAMILIES
+  // FONT FAMILY (Single Family for Visual Consistency)
   // ============================================================================
 
-  /// Display and heading font (soft, premium feel)
-  static const String displayFont = 'SF Pro Rounded';
-
-  /// Body and UI font (neutral, professional)
-  static const String bodyFont = 'Inter';
-
-  /// Monospace font for technical elements
-  static const String monoFont = 'JetBrains Mono';
+  /// Primary font for all text
+  /// Why Inter: Neutral, open apertures, excellent readability at all sizes
+  /// No display font needed - weight and size create sufficient hierarchy
+  static const String primaryFont = 'Inter';
 
   // ============================================================================
-  // DISPLAY STYLES (Timer, Hero Elements)
+  // LEVEL 1: DISPLAY (Timer, Hero Numbers)
   // ============================================================================
+  // Purpose: Single focal point - the active timer or primary metric
+  // Why it exists: User needs to read time at a glance from distance
+  // Usage: Timer countdown (25:00), large statistics
+  // Characteristics: Thin weight for elegance, tight tracking for compactness
 
-  /// 48px - Session timer, large displays
+  /// 96px - Primary timer display (ultra large)
+  /// Used for: Active focus session countdown
+  static const displayHero = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 96,
+    height: 1.0, // 96px line height (tight, no leading needed)
+    fontWeight: FontWeight.w200, // Thin - elegant and calm
+    letterSpacing: -2.0, // Tight tracking for cohesion
+    color: AppColors.textPrimary,
+  );
+
+  /// 64px - Secondary large display
+  /// Used for: Session completion time, big stats
   static const displayLarge = TextStyle(
-    fontFamily: displayFont,
-    fontSize: 48,
-    height: 1.17, // 56px line height
-    fontWeight: FontWeight.w700,
-    letterSpacing: -0.5,
-    color: AppColors.gray50,
+    fontFamily: primaryFont,
+    fontSize: 64,
+    height: 1.0, // 64px line height
+    fontWeight: FontWeight.w200, // Thin
+    letterSpacing: -1.5,
+    color: AppColors.textPrimary,
   );
 
-  /// 36px - Section headers, large titles
+  /// 48px - Tertiary display
+  /// Used for: Analytics hero numbers (180 min, 95% quality)
   static const displayMedium = TextStyle(
-    fontFamily: displayFont,
-    fontSize: 36,
-    height: 1.22, // 44px line height
-    fontWeight: FontWeight.w700,
-    letterSpacing: -0.5,
-    color: AppColors.gray50,
-  );
-
-  /// 28px - Small displays, emphasized text
-  static const displaySmall = TextStyle(
-    fontFamily: displayFont,
-    fontSize: 28,
-    height: 1.29, // 36px line height
-    fontWeight: FontWeight.w600,
-    letterSpacing: 0,
-    color: AppColors.gray50,
+    fontFamily: primaryFont,
+    fontSize: 48,
+    height: 1.08, // 52px line height (slight breathing room)
+    fontWeight: FontWeight.w300, // Light
+    letterSpacing: -1.0,
+    color: AppColors.textPrimary,
   );
 
   // ============================================================================
@@ -200,6 +205,19 @@ class AppTextStyles {
   /// Primary brand text (indigo)
   static TextStyle get primary =>
       bodyMedium.copyWith(color: AppColors.indigo500);
+
+  // ============================================================================
+  // HEADLINE ALIASES (for backwards compatibility)
+  // ============================================================================
+
+  /// 48px - Alias for displayLarge
+  static const headlineLarge = displayLarge;
+
+  /// 36px - Alias for displayMedium
+  static const headlineMedium = displayMedium;
+
+  /// 28px - Alias for displaySmall
+  static const headlineSmall = displaySmall;
 
   // ============================================================================
   // UTILITY EXTENSIONS

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// Clean, minimal settings screen
 ///
@@ -36,7 +36,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               pinned: true,
               title: Text(
                 'Settings',
-                style: AppTypography.h2.copyWith(color: AppColors.white),
+                style: AppTextStyles.titleLarge.copyWith(
+                  color: AppColors.white,
+                ),
               ),
               automaticallyImplyLeading: false,
             ),
@@ -78,7 +80,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ]),
 
-                  AppSpacing.verticalSpaceLarge,
+                  AppSpacing.gapLg,
 
                   // Notifications Section
                   _buildSectionHeader('Notifications'),
@@ -103,7 +105,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ]),
 
-                  AppSpacing.verticalSpaceLarge,
+                  AppSpacing.gapLg,
 
                   // Sounds Section
                   _buildSectionHeader('Sounds'),
@@ -137,7 +139,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ]),
 
-                  AppSpacing.verticalSpaceLarge,
+                  AppSpacing.gapLg,
 
                   // Data Controls Section
                   _buildSectionHeader('Data & Privacy'),
@@ -171,7 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ]),
 
-                  AppSpacing.verticalSpaceLarge,
+                  AppSpacing.gapLg,
 
                   // About Section
                   _buildSectionHeader('About'),
@@ -205,7 +207,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ]),
 
-                  AppSpacing.verticalSpaceXXLarge,
+                  AppSpacing.gapXxl,
                 ]),
               ),
             ),
@@ -224,7 +226,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       child: Text(
         title.toUpperCase(),
-        style: AppTypography.caption.copyWith(
+        style: AppTextStyles.bodySmall.copyWith(
           color: AppColors.gray500,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
@@ -260,7 +262,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         title: Text(
           title,
-          style: AppTypography.body.copyWith(
+          style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.white,
             fontWeight: FontWeight.w500,
           ),
@@ -269,13 +271,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           padding: const EdgeInsets.only(top: 4),
           child: Text(
             subtitle,
-            style: AppTypography.caption.copyWith(color: AppColors.gray400),
+            style: AppTextStyles.bodySmall.copyWith(color: AppColors.gray400),
           ),
         ),
         trailing: Switch(
           value: value,
           onChanged: enabled ? onChanged : null,
-          activeColor: AppColors.indigo500,
+          activeThumbColor: AppColors.indigo500,
           activeTrackColor: AppColors.indigo500.withOpacity(0.3),
           inactiveThumbColor: AppColors.gray400,
           inactiveTrackColor: AppColors.slate700,
@@ -300,7 +302,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         title: Text(
           title,
-          style: AppTypography.body.copyWith(
+          style: AppTextStyles.bodyMedium.copyWith(
             color: destructive ? AppColors.red400 : AppColors.white,
             fontWeight: FontWeight.w500,
           ),
@@ -309,9 +311,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           padding: const EdgeInsets.only(top: 4),
           child: Text(
             subtitle,
-            style: AppTypography.caption.copyWith(
+            style: AppTextStyles.bodySmall.copyWith(
               color: destructive
-                  ? AppColors.red300.withOpacity(0.7)
+                  ? AppColors.red400.withOpacity(0.7)
                   : AppColors.gray400,
             ),
           ),
@@ -344,18 +346,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         title: Text(
           'Export Data',
-          style: AppTypography.h3.copyWith(color: AppColors.white),
+          style: AppTextStyles.titleMedium.copyWith(color: AppColors.white),
         ),
         content: Text(
           'Your focus history will be exported as a JSON file. This file contains all your session data and can be imported later.',
-          style: AppTypography.body.copyWith(color: AppColors.gray300),
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray300),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel',
-              style: AppTypography.body.copyWith(color: AppColors.gray400),
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.gray400,
+              ),
             ),
           ),
           TextButton(
@@ -366,7 +370,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SnackBar(
                   content: Text(
                     'Export functionality coming soon',
-                    style: AppTypography.body.copyWith(color: AppColors.white),
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.white,
+                    ),
                   ),
                   backgroundColor: AppColors.slate800,
                 ),
@@ -374,7 +380,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
             child: Text(
               'Export',
-              style: AppTypography.body.copyWith(color: AppColors.indigo400),
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.indigo400,
+              ),
             ),
           ),
         ],
@@ -393,18 +401,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         title: Text(
           'Clear All Data',
-          style: AppTypography.h3.copyWith(color: AppColors.red400),
+          style: AppTextStyles.titleMedium.copyWith(color: AppColors.red400),
         ),
         content: Text(
           'This will permanently delete all your focus sessions, analytics, and settings. This action cannot be undone.',
-          style: AppTypography.body.copyWith(color: AppColors.gray300),
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray300),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel',
-              style: AppTypography.body.copyWith(color: AppColors.gray400),
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.gray400,
+              ),
             ),
           ),
           TextButton(
@@ -415,7 +425,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SnackBar(
                   content: Text(
                     'Data cleared successfully',
-                    style: AppTypography.body.copyWith(color: AppColors.white),
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.white,
+                    ),
                   ),
                   backgroundColor: AppColors.slate800,
                 ),
@@ -423,7 +435,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
             child: Text(
               'Delete',
-              style: AppTypography.body.copyWith(color: AppColors.red400),
+              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.red400),
             ),
           ),
         ],

@@ -4,6 +4,7 @@ import '../../core/widgets/circular_focus_timer.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../core/theme/app_shadows.dart';
 import '../focus_session/presentation/widgets/session_setup_bottom_sheet.dart';
 import '../focus_session/presentation/models/session_config.dart';
 import '../focus_session/presentation/providers/session_controller.dart';
@@ -50,10 +51,10 @@ class HomeScreen extends ConsumerWidget {
                       vertical: AppSpacing.sm,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.amber400.withOpacity(0.1),
+                      color: AppColors.amber.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: AppColors.amber400.withOpacity(0.3),
+                        color: AppColors.amber.withOpacity(0.3),
                       ),
                     ),
                     child: Row(
@@ -62,13 +63,13 @@ class HomeScreen extends ConsumerWidget {
                         Icon(
                           Icons.warning_amber_rounded,
                           size: 16,
-                          color: AppColors.amber400,
+                          color: AppColors.amber,
                         ),
                         AppSpacing.gapSm,
                         Text(
                           '${session.distractionCount} distraction${session.distractionCount > 1 ? 's' : ''} detected',
                           style: AppTextStyles.bodySmall.copyWith(
-                            color: AppColors.amber400,
+                            color: AppColors.amber,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

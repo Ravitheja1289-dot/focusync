@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -40,9 +39,7 @@ class _BreathingAnimationState extends State<BreathingAnimation>
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(
-        milliseconds: (_totalCycleDuration * 1000).toInt(),
-      ),
+      duration: Duration(milliseconds: (_totalCycleDuration * 1000).toInt()),
       vsync: this,
     )..repeat();
 

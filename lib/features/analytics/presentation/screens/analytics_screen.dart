@@ -409,7 +409,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     ];
     final bestDay = dayNames[maxDay];
 
-    final totalMinutes = weeklyData.reduce((a, b) => a + b);
+    // final totalMinutes = weeklyData.reduce((a, b) => a + b);
     final activeDays = weeklyData.where((m) => m > 0).length;
 
     final insights = <_Insight>[];

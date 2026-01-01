@@ -6,7 +6,6 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../widgets/breathing_animation.dart';
 import '../providers/session_controller.dart';
-import '../../focus_session/domain/entities/focus_session.dart';
 
 /// Break screen with calming breathing animation
 ///

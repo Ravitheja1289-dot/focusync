@@ -5,6 +5,7 @@ import 'app_page_transitions.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/analytics/presentation/screens/analytics_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/splash/splash_screen.dart';
 
 // TODO: Import actual screens when they're created
 // For now, using placeholder screens
@@ -17,10 +18,21 @@ class AppRouter {
 
   /// Global router instance
   static final GoRouter router = GoRouter(
-    initialLocation: AppRoutes.home,
+    initialLocation: '/splash',
     debugLogDiagnostics: true,
 
     routes: [
+      // ========================================================================
+      // SPLASH SCREEN
+      // ========================================================================
+      GoRoute(
+        path: '/splash',
+        pageBuilder: (context, state) => AppPageTransitions.fade(
+          child: const SplashScreen(),
+          context: context,
+        ),
+      ),
+
       // ========================================================================
       // MAIN SHELL (Bottom Navigation)
       // ========================================================================
@@ -33,7 +45,7 @@ class AppRouter {
           // Home screen
           GoRoute(
             path: AppRoutes.home,
-            pageBuilder: (context, state) => AppPageTransitions.fade(
+            pageBuilder: (context, state) => AppPageTransitions.smoothBlend(
               child: const HomeScreen(),
               context: context,
             ),
@@ -116,11 +128,7 @@ class _MainScaffold extends StatefulWidget {
 }
 
 class _MainScaffoldState extends State<_MainScaffold> {
-  int _selectedIndex = 0;
-
   void _onItemTapped(int index) {
-    setState(() => _selectedIndex = index);
-
     switch (index) {
       case 0:
         context.go(AppRoutes.home);

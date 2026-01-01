@@ -3,8 +3,8 @@ import '../../core/widgets/circular_focus_timer.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/app_spacing.dart';
-import '../focus_session/presentation/widgets/session_setup_bottom_sheet.dart';
-import '../focus_session/presentation/models/session_config.dart';
+// import '../focus_session/presentation/widgets/session_setup_bottom_sheet.dart';
+// import '../focus_session/presentation/models/session_config.dart';
 
 /// Demo screen showcasing the CircularFocusTimer widget
 class TimerDemoScreen extends StatefulWidget {
@@ -84,21 +84,28 @@ class _TimerDemoScreenState extends State<TimerDemoScreen> {
   }
 
   void _showSetupSheet() {
-    SessionSetupBottomSheet.show(
-      context,
-      onStart: (config) {
-        // TODO: Start session with config
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Starting ${config.focusDuration.inMinutes} min ${config.focusMode.label} session',
-            ),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-        _startAnimation();
-      },
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Session setup coming soon'),
+        duration: Duration(seconds: 2),
+      ),
     );
+    // TODO: Implement SessionSetupBottomSheet.show
+    // SessionSetupBottomSheet.show(
+    //   context,
+    //   onStart: (config) {
+    //     // TODO: Start session with config
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(
+    //         content: Text(
+    //           'Starting ${config.focusDuration.inMinutes} min ${config.focusMode.label} session',
+    //         ),
+    //         duration: const Duration(seconds: 2),
+    //       ),
+    //     );
+    //     _startAnimation();
+    //   },
+    // );
   }
 
   String _getTimeText() {
