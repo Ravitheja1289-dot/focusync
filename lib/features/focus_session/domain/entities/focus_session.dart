@@ -48,10 +48,10 @@ class FocusSession extends Equatable {
   /// Calculate elapsed time
   Duration get elapsedDuration => totalDuration - remainingDuration;
 
-  /// Calculate progress (0.0 to 1.0)
+  /// Calculate progress (1.0 to 0.0) - starts full and decreases
   double get progress {
     if (totalDuration.inSeconds == 0) return 0.0;
-    return elapsedDuration.inSeconds / totalDuration.inSeconds;
+    return remainingDuration.inSeconds / totalDuration.inSeconds;
   }
 
   /// Check if session is active (running or paused)

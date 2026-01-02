@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/widgets/circular_focus_timer.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/router/app_routes.dart';
 import '../providers/session_controller.dart';
 import '../../domain/entities/focus_session.dart';
 import '../widgets/distraction_warning_overlay.dart';
@@ -56,15 +58,26 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen> {
     }
   }
 
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes;
+    final seconds = duration.inSeconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
   void _showEndConfirmation() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => _EndSessionBottomSheet(
+      builder: (sheetContext) => _EndSessionBottomSheet(
         onConfirm: () {
           ref.read(sessionControllerProvider.notifier).cancelSession();
-          Navigator.of(context).pop(); // Close bottom sheet
-          Navigator.of(context).pop(); // Exit focus screen
+          Navigator.of(sheetContext).pop(); // Close bottom sheet
+          // Use mounted check and navigate after sheet is dismissed
+          Future.microtask(() {
+            if (mounted) {
+              context.go(AppRoutes.home);
+            }
+          });
         },
       ),
     );
@@ -78,7 +91,7 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen> {
       // Session ended, navigate back
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          Navigator.of(context).pop();
+          context.go(AppRoutes.home);
         }
       });
       return const SizedBox.shrink();
@@ -117,11 +130,7 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen> {
     }
 
     final isPaused = session.status == SessionStatus.paused;
-    final remainingSeconds = session.remainingDuration.inSeconds;
-    final minutes = remainingSeconds ~/ 60;
-    final seconds = remainingSeconds % 60;
-    final timeText =
-        '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    final timeText = _formatDuration(session.remainingDuration);
 
     return Scaffold(
       backgroundColor: AppColors.slate950,
@@ -158,33 +167,17 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen> {
                             Text(
                               timeText,
                               style: const TextStyle(
-                                fontFamily: AppTextStyles.displayFont,
+                                fontFamily: 'Inter',
                                 fontSize: 72,
                                 height: 1.1,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: -1.0,
-                                color: AppColors.gray50,
+                                color: AppColors.white,
                               ),
                             ),
 
-                            AppSpacing.gapSm,
-
-                            // Session Info (secondary)
-                            Text(
-                              '${session.totalDuration.inMinutes} min focus',
-                              style: AppTextStyles.bodySmall.copyWith(
-                                color: AppColors.gray400,
-                              ),
-                            ),
-
-                            if (isPaused) ...[
-                              AppSpacing.gapMd,
-                              const Icon(
-                                Icons.pause_circle_outline,
-                                size: 48,
-                                color: AppColors.indigo400,
-                              ),
-                            ],
+                            // No secondary label - time is primary info
+                            // No pause icon - state shown in timer ring color
                           ],
                         ),
                       ),
@@ -192,34 +185,22 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen> {
 
                     const Spacer(flex: 1),
 
-                    // Subtle Hint
-                    if (!isPaused)
-                      Text(
-                        'Tap to pause',
-                        style: AppTextStyles.labelSmall.copyWith(
-                          color: AppColors.gray600,
-                        ),
-                      ),
-
+                    // Paused state controls
                     if (isPaused)
                       Column(
                         children: [
-                          ElevatedButton.icon(
+                          TextButton(
                             onPressed: () {
                               ref
                                   .read(sessionControllerProvider.notifier)
                                   .resumeSession();
                             },
-                            icon: const Icon(Icons.play_arrow),
-                            label: const Text('Resume'),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(160, 56),
-                            ),
+                            child: const Text('Resume'), // No icon
                           ),
-                          AppSpacing.gapSm,
+                          const SizedBox(height: 8),
                           TextButton(
                             onPressed: _showEndConfirmation,
-                            child: const Text('End Session'),
+                            child: const Text('End'),
                           ),
                         ],
                       ),
@@ -268,10 +249,10 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.amber400.withOpacity(0.2),
+                            color: AppColors.gray60.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(4),
                             border: Border.all(
-                              color: AppColors.amber400.withOpacity(0.4),
+                              color: AppColors.gray60.withOpacity(0.4),
                             ),
                           ),
                           child: Row(
@@ -280,13 +261,13 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen> {
                               Icon(
                                 Icons.warning_amber_rounded,
                                 size: 14,
-                                color: AppColors.amber400,
+                                color: AppColors.gray60,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 '${session.distractionCount}',
                                 style: AppTextStyles.labelSmall.copyWith(
-                                  color: AppColors.amber400,
+                                  color: AppColors.gray60,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -438,7 +419,8 @@ class _EndSessionBottomSheet extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: onConfirm,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.error,
+                        backgroundColor: AppColors.black,
+                        foregroundColor: AppColors.white,
                       ),
                       child: const Text('End Session'),
                     ),

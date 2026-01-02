@@ -54,8 +54,8 @@ class _CelebrationConfettiState extends State<CelebrationConfetti>
       AppColors.indigo400,
       AppColors.indigo500,
       AppColors.blue400,
-      AppColors.purple400,
-      AppColors.gray300,
+      AppColors.gray60,
+      AppColors.gray80,
     ];
     return colors[random.nextInt(colors.length)];
   }

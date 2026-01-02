@@ -162,7 +162,7 @@ class _WeeklyFocusChartState extends State<WeeklyFocusChart>
                             fontSize: 11,
                             color: isToday
                                 ? AppColors.indigo400
-                                : AppColors.gray500,
+                                : AppColors.gray50,
                             fontWeight: isToday
                                 ? FontWeight.w600
                                 : FontWeight.w400,

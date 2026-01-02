@@ -235,7 +235,7 @@ class _BreathingAnimationState extends State<BreathingAnimation>
                     height: 6,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: isActive ? AppColors.indigo400 : AppColors.gray700,
+                      color: isActive ? AppColors.white : AppColors.gray70,
                     ),
                   ),
                 );

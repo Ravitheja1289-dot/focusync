@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/widgets/circular_focus_timer.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../core/theme/app_spacing.dart';
-import '../../core/theme/app_shadows.dart';
 import '../focus_session/presentation/widgets/session_setup_bottom_sheet.dart';
 import '../focus_session/presentation/models/session_config.dart';
 import '../focus_session/presentation/providers/session_controller.dart';
@@ -12,11 +10,18 @@ import '../focus_session/presentation/screens/active_focus_screen.dart';
 import '../focus_session/domain/entities/focus_session.dart';
 
 /// Home screen with integrated session management
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int _selectedDuration = 25; // Default 25 minutes
+
+  @override
+  Widget build(BuildContext context) {
     // Use select to only rebuild when session changes, not internal state
     final session = ref.watch(
       sessionControllerProvider.select(
@@ -24,96 +29,181 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
 
+    final isIdle = session == null;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Focusync'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // TODO: Navigate to settings
-            },
-            icon: const Icon(Icons.settings_outlined),
-          ),
-        ],
-      ),
+      backgroundColor: AppColors.backgroundPrimary,
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: AppSpacing.screenPadding,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Session Stats
-                if (session != null && session.distractionCount > 0) ...[
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.sm,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.amber.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: AppColors.amber.withOpacity(0.3),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.warning_amber_rounded,
-                          size: 16,
-                          color: AppColors.amber,
-                        ),
-                        AppSpacing.gapSm,
-                        Text(
-                          '${session.distractionCount} distraction${session.distractionCount > 1 ? 's' : ''} detected',
-                          style: AppTextStyles.bodySmall.copyWith(
-                            color: AppColors.amber,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  AppSpacing.gapLg,
-                ] else if (session == null) ...[
-                  // Today's Stats (placeholder)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Today: 0h 0m',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.gray400,
-                        ),
-                      ),
-                    ],
-                  ),
-                  AppSpacing.gapLg,
+        child: Stack(
+          children: [
+            // Main content - centered timer
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Spacer(flex: 2),
+
+                  // Quality preview (only when idle and sessions exist)
+                  if (isIdle) _buildQualityPreview(),
+
+                  if (isIdle)
+                    const SizedBox(height: 64)
+                  else
+                    const SizedBox(height: 32),
+
+                  // Timer Display (dominant element)
+                  _buildTimer(context, ref, session),
+
+                  const SizedBox(height: 32),
+
+                  // Duration options (only when idle)
+                  if (isIdle) _buildDurationOptions(),
+
+                  const Spacer(flex: 3),
                 ],
-
-                // Timer Display
-                _buildTimer(context, ref, session),
-
-                AppSpacing.gapXl,
-
-                // Duration Selector or Session Controls
-                if (session == null)
-                  _buildDurationSelector(context, ref)
-                else
-                  _buildSessionControls(context, ref, session),
-
-                AppSpacing.gapXl,
-
-                // Ambient Sound (placeholder)
-                if (session == null) _buildAmbientSound(context),
-              ],
+              ),
             ),
+
+            // Profile icon (top-right, only when idle)
+            if (isIdle)
+              Positioned(top: 16, right: 16, child: _buildProfileIcon(context)),
+
+            // Distraction warning (centered below timer, only during active session)
+            if (session != null && session.distractionCount > 0)
+              Positioned(
+                bottom: 80,
+                left: 0,
+                right: 0,
+                child: _buildDistractionWarning(session),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQualityPreview() {
+    // TODO: Calculate actual quality from completed sessions today
+    final completedSessionsToday = 0; // Placeholder
+    final averageQuality = 92; // Placeholder
+
+    if (completedSessionsToday == 0) {
+      return const SizedBox.shrink();
+    }
+
+    return Text(
+      '$averageQuality%',
+      style: AppTextStyles.bodySmall.copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w300,
+        color: AppColors.white,
+      ),
+    );
+  }
+
+  Widget _buildProfileIcon(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // TODO: Open profile/settings
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        child: Icon(Icons.person_outline, size: 28, color: AppColors.white),
+      ),
+    );
+  }
+
+  Widget _buildSettingsDots(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // TODO: Open settings overlay
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        child: Text(
+          '···',
+          style: TextStyle(
+            fontSize: 10,
+            color: AppColors.white,
+            letterSpacing: 2,
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildDistractionWarning(FocusSession session) {
+    // No border - text alone communicates state (frozen minimal design)
+    return Center(
+      child: Text(
+        '[${session.distractionCount}]',
+        style: AppTextStyles.bodySmall.copyWith(
+          fontSize: 12,
+          color: AppColors.white,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDurationOptions() {
+    const durations = [10, 15, 25, 60];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: durations.map((duration) {
+        final isSelected = duration == _selectedDuration;
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedDuration = duration;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.white
+                    : AppColors.backgroundSecondary,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Text(
+                duration.toString(),
+                style: AppTextStyles.bodyMedium.copyWith(
+                  fontSize: 16,
+                  color: isSelected ? AppColors.black : AppColors.gray50,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildDurationLabel(BuildContext context, WidgetRef ref) {
+    // TODO: Get actual default duration from settings
+    final defaultDuration = 25;
+
+    return GestureDetector(
+      onTap: () => _showDurationPicker(context, ref),
+      child: Text(
+        '$defaultDuration', // No 'min' suffix - context is obvious
+        style: AppTextStyles.bodySmall.copyWith(
+          fontSize: 12,
+          color: AppColors.white,
+        ),
+      ),
+    );
+  }
+
+  void _showDurationPicker(BuildContext context, WidgetRef ref) {
+    // TODO: Show inline duration picker
+    // For now, show setup sheet
+    _showSetupSheet(context, ref);
   }
 
   Widget _buildTimer(
@@ -122,37 +212,40 @@ class HomeScreen extends ConsumerWidget {
     FocusSession? session,
   ) {
     if (session == null) {
-      // Idle state - show START button
+      // Idle state - show full circle (ready to start)
+      final timeText = '${_selectedDuration.toString().padLeft(2, '0')}:00';
+
       return GestureDetector(
-        onTap: () => _showSetupSheet(context, ref),
-        child: Container(
-          width: 280,
-          height: 280,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.indigo500,
-            boxShadow: context.shadowFloating,
-          ),
-          child: Center(
-            child: Text(
-              'START\nFOCUS',
-              textAlign: TextAlign.center,
-              style: AppTextStyles.displayMedium.copyWith(
-                color: AppColors.white,
-              ),
+        onTap: () {
+          // Start session with selected duration
+          ref
+              .read(sessionControllerProvider.notifier)
+              .startSession(duration: Duration(minutes: _selectedDuration));
+        },
+        child: CircularFocusTimer(
+          progress: 1.0, // Full circle in idle state
+          state: TimerState.idle,
+          size: 320,
+          strokeWidth: 3,
+          animationDuration: const Duration(milliseconds: 150),
+          child: Text(
+            timeText,
+            style: AppTextStyles.displayHero.copyWith(
+              fontSize: 96,
+              fontWeight: FontWeight.w200,
+              color: AppColors.white, // Bright white
+              fontFeatures: const [
+                FontFeature.tabularFigures(), // Prevent layout shift
+              ],
             ),
           ),
         ),
       );
     }
 
-    // Active session - show timer
+    // Active session - show timer with progress
     final timerState = _getTimerState(session.status);
-    final remainingSeconds = session.remainingDuration.inSeconds;
-    final minutes = remainingSeconds ~/ 60;
-    final seconds = remainingSeconds % 60;
-    final timeText =
-        '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    final timeText = _formatDuration(session.remainingDuration);
 
     return GestureDetector(
       onTap: () {
@@ -172,20 +265,38 @@ class HomeScreen extends ConsumerWidget {
       child: CircularFocusTimer(
         progress: session.progress,
         state: timerState,
-        size: 280,
-        strokeWidth: 8,
+        size: 320,
+        strokeWidth: session.status == SessionStatus.paused
+            ? 3
+            : 3, // 3px for both running and paused
+        animationDuration: const Duration(
+          milliseconds: 150,
+        ), // Minimal animation
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(timeText, style: AppTextStyles.displayLarge),
-            AppSpacing.gapSm,
             Text(
-              '${session.totalDuration.inMinutes} min',
-              style: AppTextStyles.bodySmall,
+              timeText,
+              style: AppTextStyles.displayHero.copyWith(
+                fontSize: 96,
+                fontWeight: FontWeight.w200,
+                color: AppColors.white, // Pure white always
+                fontFeatures: const [
+                  FontFeature.tabularFigures(), // Prevent layout jump
+                ],
+              ),
             ),
             if (session.status == SessionStatus.paused) ...[
-              AppSpacing.gapSm,
-              Icon(Icons.play_arrow, size: 32, color: AppColors.indigo400),
+              const SizedBox(height: 16),
+              // Pause icon (two vertical bars in white for consistency)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(width: 4, height: 16, color: AppColors.white),
+                  const SizedBox(width: 4),
+                  Container(width: 4, height: 16, color: AppColors.white),
+                ],
+              ),
             ],
           ],
         ),
@@ -193,6 +304,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
+  // Helper methods
   TimerState _getTimerState(SessionStatus status) {
     switch (status) {
       case SessionStatus.running:
@@ -200,116 +312,15 @@ class HomeScreen extends ConsumerWidget {
       case SessionStatus.paused:
         return TimerState.paused;
       case SessionStatus.completed:
-        return TimerState.idle;
       case SessionStatus.cancelled:
         return TimerState.idle;
     }
   }
 
-  Widget _buildDurationSelector(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        Text(
-          'Quick Start',
-          style: AppTextStyles.labelMedium.copyWith(color: AppColors.gray400),
-        ),
-        AppSpacing.gapSm,
-        Wrap(
-          spacing: AppSpacing.sm,
-          children: [15, 25, 45, 60].map((minutes) {
-            return OutlinedButton(
-              onPressed: () {
-                ref
-                    .read(sessionControllerProvider.notifier)
-                    .startSession(duration: Duration(minutes: minutes));
-              },
-              child: Text('$minutes min'),
-            );
-          }).toList(),
-        ),
-        AppSpacing.gapMd,
-        TextButton.icon(
-          onPressed: () => _showSetupSheet(context, ref),
-          icon: const Icon(Icons.settings, size: 20),
-          label: const Text('Customize'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSessionControls(
-    BuildContext context,
-    WidgetRef ref,
-    FocusSession session,
-  ) {
-    if (session.status == SessionStatus.paused) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton.icon(
-            onPressed: () {
-              ref.read(sessionControllerProvider.notifier).resumeSession();
-            },
-            icon: const Icon(Icons.play_arrow),
-            label: const Text('Resume'),
-          ),
-          AppSpacing.gapMdH,
-          OutlinedButton.icon(
-            onPressed: () {
-              ref.read(sessionControllerProvider.notifier).cancelSession();
-            },
-            icon: const Icon(Icons.stop),
-            label: const Text('End'),
-          ),
-        ],
-      );
-    }
-
-    if (session.status == SessionStatus.completed) {
-      return Column(
-        children: [
-          const Icon(Icons.check_circle, size: 48, color: AppColors.success),
-          AppSpacing.gapSm,
-          Text(
-            'Session Complete!',
-            style: AppTextStyles.titleMedium.copyWith(color: AppColors.success),
-          ),
-        ],
-      );
-    }
-
-    // Running - show end button
-    return TextButton.icon(
-      onPressed: () {
-        ref.read(sessionControllerProvider.notifier).cancelSession();
-      },
-      icon: const Icon(Icons.close, size: 20),
-      label: const Text('End Session'),
-    );
-  }
-
-  Widget _buildAmbientSound(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.slate800,
-        borderRadius: AppSpacing.chipRadius,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.music_note, size: 16, color: AppColors.gray400),
-          AppSpacing.gapSmH,
-          Text(
-            'Rain (off)',
-            style: AppTextStyles.labelMedium.copyWith(color: AppColors.gray400),
-          ),
-        ],
-      ),
-    );
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes;
+    final seconds = duration.inSeconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   void _showSetupSheet(BuildContext context, WidgetRef ref) {

@@ -15,6 +15,19 @@ class AppRoutes {
   /// App settings
   static const String settings = '/settings';
 
+  /// Account screen
+  static const String account = '/account';
+
+  // ============================================================================
+  // AUTH ROUTES
+  // ============================================================================
+
+  /// Lock screen
+  static const String lock = '/lock';
+
+  /// Splash screen
+  static const String splash = '/splash';
+
   // ============================================================================
   // SESSION ROUTES (Full-Screen, Immersive)
   // ============================================================================

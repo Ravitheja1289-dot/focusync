@@ -7,57 +7,58 @@ class AppMotion {
   AppMotion._();
 
   // ============================================================================
-  // EASING CURVES
+  // EASING CURVES (Frozen Minimal Design)
   // ============================================================================
 
-  /// Standard curve (default for most animations)
-  static const Cubic standard = Cubic(0.4, 0.0, 0.2, 1.0);
+  /// Linear - no easing, purely functional (state transitions)
+  static const Curve linear = Curves.linear;
 
-  /// Decelerate curve (for entry animations)
-  static const Cubic decelerate = Cubic(0.0, 0.0, 0.2, 1.0);
-
-  /// Accelerate curve (for exit animations)
-  static const Cubic accelerate = Cubic(0.4, 0.0, 1.0, 1.0);
-
-  /// Sharp curve (for instant feel)
-  static const Cubic sharp = Cubic(0.4, 0.0, 0.6, 1.0);
-
-  /// Calm curve (Focusync custom - gentle, slow)
+  /// Calm - minimal easing for subtle feedback only
+  /// Used for: color fades, opacity changes
   static const Cubic calm = Cubic(0.25, 0.1, 0.25, 1.0);
 
   // ============================================================================
-  // DURATION SCALE
+  // DURATION SCALE (Frozen Minimal Design)
   // ============================================================================
 
-  /// 50ms - Instant interactions (checkbox, radio)
-  static const Duration instant = Duration(milliseconds: 50);
+  /// 0ms - Instant (no motion, immediate state change)
+  /// Use for: state changes that don't need visual communication
+  static const Duration instant = Duration.zero;
 
-  /// 150ms - Fast interactions (button press, chip select)
+  /// 100ms - Subtle (minimal feedback)
+  /// Use for: opacity fades, color transitions
+  static const Duration subtle = Duration(milliseconds: 100);
+
+  /// 150ms - Fast (quick state communication)
+  /// Use for: timer ring updates, pause icon appearance
   static const Duration fast = Duration(milliseconds: 150);
 
-  /// 250ms - Normal transitions (default)
-  static const Duration normal = Duration(milliseconds: 250);
-
-  /// 400ms - Slow transitions (screen changes, modals)
-  static const Duration slow = Duration(milliseconds: 400);
-
-  /// 600ms - Luxurious animations (celebrations, onboarding)
-  static const Duration luxurious = Duration(milliseconds: 600);
+  /// 200ms - Normal (screen transitions only)
+  /// Use for: navigation between screens
+  static const Duration normal = Duration(milliseconds: 200);
 
   // ============================================================================
-  // COMMON ANIMATION PATTERNS
+  // MOTION POLICY (Frozen Minimal Design)
   // ============================================================================
 
-  /// Button press animation (scale down slightly)
-  static const double buttonPressScale = 0.98;
-
-  /// Modal scale animation (start slightly smaller)
-  static const double modalInitialScale = 0.9;
-
-  /// Ripple expand duration
-  static const Duration rippleDuration = Duration(milliseconds: 200);
-
-  /// Breathing animation cycle (4s inhale + 4s exhale)
+  /// ✅ ALLOWED: Motion that communicates state changes
+  /// - Timer progress ring updates (linear, 150ms)
+  /// - Session state transitions (pause → running, color fade 100ms)
+  /// - Screen navigation (fade 200ms)
+  /// - Opacity changes for appear/disappear (100ms)
+  ///
+  /// ❌ FORBIDDEN: Motion for delight or decoration
+  /// - Bouncy/elastic easing (easeOutBack, easeInOutBack)
+  /// - Scale animations (growing/shrinking)
+  /// - Staggered animations
+  /// - Particle effects
+  /// - Ripple effects
+  /// - Breathing/pulsing animations (use static visual instead)
+  /// - Slide transitions with physics
+  /// - Any animation > 200ms
+  /// - Multiple simultaneous animations
+  ///
+  /// Breathing animation cycle (informational only, not animated)
   static const Duration breathingCycle = Duration(seconds: 8);
 
   // ============================================================================
@@ -71,7 +72,8 @@ class AppMotion {
   }
 
   /// Get curve respecting user's reduce motion setting
-  static Curve getCurve(BuildContext context, {Curve defaultCurve = calm}) {
+  /// Default is linear (no easing) per frozen minimal design
+  static Curve getCurve(BuildContext context, {Curve defaultCurve = linear}) {
     final reduceMotion = MediaQuery.of(context).disableAnimations;
     return reduceMotion ? Curves.linear : defaultCurve;
   }
@@ -85,7 +87,8 @@ extension AnimationExtension on BuildContext {
   }
 
   /// Get animation curve respecting accessibility settings
-  Curve curve([Curve defaultCurve = AppMotion.calm]) {
+  /// Default is linear (no easing) per frozen minimal design
+  Curve curve([Curve defaultCurve = AppMotion.linear]) {
     return AppMotion.getCurve(this, defaultCurve: defaultCurve);
   }
 

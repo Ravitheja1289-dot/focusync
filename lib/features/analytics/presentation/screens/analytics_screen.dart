@@ -25,15 +25,26 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     // TODO: Replace with actual data from analytics provider
     final todayMinutes = 45;
     final weekTotal = 180;
+    final monthTotal = 720;
+    final todaySessionsCompleted = 3;
+    final weekSessionsCompleted = 12;
+    final monthSessionsCompleted = 48;
+    final avgSessionLength = 25; // minutes
     final currentStreak = 3;
     final bestStreak = 7;
+    final activeDaysThisMonth = 20;
+    final completionRate = 0.85; // 85%
+    final interruptionTrend = -12; // -12% vs last week
+    final bestFocusTime = '6–9 AM';
     final weeklyData = [30, 45, 60, 40, 50, 35, 45]; // Mon-Sun
     final qualityScores = [0.9, 0.85, 0.95, 0.8, 0.88, 0.92, 0.87];
     final avgQuality =
         qualityScores.reduce((a, b) => a + b) / qualityScores.length;
+    final heatmapData = _generateMockHeatmapData();
+    final hourlyDistribution = _generateMockHourlyData();
 
     return Scaffold(
-      backgroundColor: AppColors.slate950,
+      backgroundColor: AppColors.backgroundPrimary,
       appBar: AppBar(
         title: const Text('Focus Analytics'),
         backgroundColor: Colors.transparent,
@@ -41,46 +52,74 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppSpacing.screenPadding,
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Today's Summary
-              _buildSectionHeader('Today'),
+              // SECTION 1 — Focus Performance (Core)
+              _buildSectionHeader('Focus Performance'),
               AppSpacing.gapMd,
-              _buildTodayCard(todayMinutes),
+
+              // 1. Total Focus Time
+              _buildFocusTimeCard(todayMinutes, weekTotal, monthTotal),
+              AppSpacing.gapMd,
+
+              // 2. Sessions Completed
+              _buildSessionsCard(
+                todaySessionsCompleted,
+                weekSessionsCompleted,
+                monthSessionsCompleted,
+              ),
+              AppSpacing.gapMd,
+
+              // 3. Average Session Length
+              _buildAvgSessionCard(avgSessionLength),
 
               AppSpacing.gapXl,
-              AppSpacing.gapLg,
 
-              // This Week
-              _buildSectionHeader('This Week'),
+              // SECTION 2 — Consistency & Discipline
+              _buildSectionHeader('Consistency & Discipline'),
               AppSpacing.gapMd,
-              _buildWeekCard(weekTotal, weeklyData),
 
-              AppSpacing.gapXl,
-              AppSpacing.gapLg,
-
-              // Focus Quality
-              _buildSectionHeader('Focus Quality'),
-              AppSpacing.gapMd,
-              _buildQualityCard(avgQuality, qualityScores),
-
-              AppSpacing.gapXl,
-              AppSpacing.gapLg,
-
-              // Streaks
-              _buildSectionHeader('Consistency'),
-              AppSpacing.gapMd,
+              // 4. Streaks
               _buildStreakCard(currentStreak, bestStreak),
+              AppSpacing.gapMd,
+
+              // 5. Active Days
+              _buildActiveDaysCard(activeDaysThisMonth),
+              AppSpacing.gapMd,
+
+              // 6. Calendar Heatmap
+              _buildHeatmapCard(heatmapData),
 
               AppSpacing.gapXl,
-              AppSpacing.gapLg,
 
-              // Insights
-              _buildSectionHeader('Insights'),
+              // SECTION 3 — Quality of Focus (Advanced)
+              _buildSectionHeader('Quality of Focus'),
               AppSpacing.gapMd,
-              _buildInsightsCard(weeklyData, avgQuality),
+
+              _buildQualityCard(avgQuality, qualityScores),
+              AppSpacing.gapMd,
+
+              // 7. Completion Rate
+              _buildCompletionRateCard(completionRate),
+              AppSpacing.gapMd,
+
+              // 8. Interruption Count
+              _buildInterruptionCard(interruptionTrend),
+
+              AppSpacing.gapXl,
+
+              // SECTION 4 — Patterns & Trends
+              _buildSectionHeader('Patterns & Trends'),
+              AppSpacing.gapMd,
+
+              // 9. Best Focus Time
+              _buildBestTimeCard(bestFocusTime, hourlyDistribution),
+              AppSpacing.gapMd,
+
+              // 10. Weekly Trend
+              _buildWeeklyTrendCard(weeklyData),
 
               AppSpacing.gapXl,
             ],
@@ -94,129 +133,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     return Text(
       title,
       style: AppTextStyles.headlineSmall.copyWith(
-        color: AppColors.gray50,
+        color: AppColors.white,
         fontWeight: FontWeight.w600,
-      ),
-    );
-  }
-
-  Widget _buildTodayCard(int minutes) {
-    final hours = minutes ~/ 60;
-    final mins = minutes % 60;
-    final displayText = hours > 0 ? '${hours}h ${mins}m' : '${mins}m';
-
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: AppColors.slate800.withOpacity(0.6),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.slate700),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.today_outlined, size: 20, color: AppColors.gray400),
-              AppSpacing.gapSm,
-              Text(
-                'Focus Time',
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.gray400,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.gapMd,
-          Text(
-            displayText,
-            style: TextStyle(
-              fontFamily: AppTextStyles.displayFont,
-              fontSize: 48,
-              fontWeight: FontWeight.w700,
-              color: AppColors.indigo400,
-              height: 1.1,
-            ),
-          ),
-          AppSpacing.gapSm,
-          Text(
-            minutes == 0
-                ? 'Start your first session today'
-                : minutes < 30
-                ? 'Off to a good start'
-                : minutes < 60
-                ? 'Building momentum'
-                : 'Great focus day!',
-            style: AppTextStyles.bodySmall.copyWith(color: AppColors.gray500),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildWeekCard(int totalMinutes, List<int> weeklyData) {
-    final hours = totalMinutes ~/ 60;
-    final mins = totalMinutes % 60;
-    final avgPerDay = (totalMinutes / 7).round();
-
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: AppColors.slate800.withOpacity(0.6),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.slate700),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Total',
-                    style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.gray500,
-                    ),
-                  ),
-                  AppSpacing.gapXs,
-                  Text(
-                    hours > 0 ? '${hours}h ${mins}m' : '${mins}m',
-                    style: AppTextStyles.headlineLarge.copyWith(
-                      color: AppColors.white,
-                      fontFamily: AppTextStyles.displayFont,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'Daily Avg',
-                    style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.gray500,
-                    ),
-                  ),
-                  AppSpacing.gapXs,
-                  Text(
-                    '${avgPerDay}m',
-                    style: AppTextStyles.headlineMedium.copyWith(
-                      color: AppColors.gray300,
-                      fontFamily: AppTextStyles.displayFont,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          AppSpacing.gapLg,
-          WeeklyFocusChart(data: weeklyData),
-        ],
       ),
     );
   }
@@ -231,13 +149,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
         ? 'Fair'
         : 'Needs Work';
 
-    final qualityColor = avgQuality >= 0.9
-        ? AppColors.green400
-        : avgQuality >= 0.7
-        ? AppColors.indigo400
-        : avgQuality >= 0.5
-        ? AppColors.amber400
-        : AppColors.orange400;
+    final qualityColor = AppColors.white;
 
     return Container(
       width: double.infinity,
@@ -259,7 +171,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   Text(
                     'Average Quality',
                     style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.gray500,
+                      color: AppColors.white,
                     ),
                   ),
                   AppSpacing.gapXs,
@@ -270,7 +182,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                       Text(
                         '$percentage%',
                         style: TextStyle(
-                          fontFamily: AppTextStyles.displayFont,
+                          fontFamily: 'Inter',
                           fontSize: 36,
                           fontWeight: FontWeight.w700,
                           color: qualityColor,
@@ -294,7 +206,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           AppSpacing.gapMd,
           Text(
             'Last 7 Sessions',
-            style: AppTextStyles.labelSmall.copyWith(color: AppColors.gray500),
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
           ),
           AppSpacing.gapSm,
           FocusQualitySparkline(qualityScores: qualityScores),
@@ -310,7 +222,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       decoration: BoxDecoration(
         color: AppColors.slate800.withOpacity(0.6),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.slate700),
+        // No border
       ),
       child: Row(
         children: [
@@ -318,34 +230,21 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.local_fire_department_outlined,
-                      size: 20,
-                      color: currentStreak > 0
-                          ? AppColors.orange400
-                          : AppColors.gray500,
-                    ),
-                    AppSpacing.gapSm,
-                    Text(
-                      'Current Streak',
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: AppColors.gray500,
-                      ),
-                    ),
-                  ],
+                // No icon - text label alone
+                Text(
+                  'Current Streak',
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: AppColors.white,
+                  ),
                 ),
                 AppSpacing.gapSm,
                 Text(
                   '$currentStreak ${currentStreak == 1 ? 'day' : 'days'}',
                   style: TextStyle(
-                    fontFamily: AppTextStyles.displayFont,
+                    fontFamily: 'Inter',
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
-                    color: currentStreak > 0
-                        ? AppColors.orange400
-                        : AppColors.gray500,
+                    color: AppColors.white,
                     height: 1.1,
                   ),
                 ),
@@ -358,30 +257,21 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.emoji_events_outlined,
-                      size: 20,
-                      color: AppColors.amber400,
-                    ),
-                    AppSpacing.gapSm,
-                    Text(
-                      'Best Streak',
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: AppColors.gray500,
-                      ),
-                    ),
-                  ],
+                // No icon
+                Text(
+                  'Best Streak',
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: AppColors.white,
+                  ),
                 ),
                 AppSpacing.gapSm,
                 Text(
                   '$bestStreak ${bestStreak == 1 ? 'day' : 'days'}',
                   style: TextStyle(
-                    fontFamily: AppTextStyles.displayFont,
+                    fontFamily: 'Inter',
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.amber400,
+                    color: AppColors.white,
                     height: 1.1,
                   ),
                 ),
@@ -393,86 +283,172 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     );
   }
 
-  Widget _buildInsightsCard(List<int> weeklyData, double avgQuality) {
-    // Calculate insights
-    final maxDay = weeklyData.indexOf(
-      weeklyData.reduce((a, b) => a > b ? a : b),
+  // SECTION 1 — Focus Performance Methods
+
+  Widget _buildFocusTimeCard(int todayMin, int weekMin, int monthMin) {
+    final todayHours = todayMin ~/ 60;
+    final todayMins = todayMin % 60;
+    final weekHours = weekMin ~/ 60;
+    final weekMins = weekMin % 60;
+    final monthHours = monthMin ~/ 60;
+
+    final weekChange = 12; // +12% vs last week (TODO: calculate)
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.gray20,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.gray40, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Total Focus Time',
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapLg,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildTimeMetric(
+                'Today',
+                todayHours > 0
+                    ? '${todayHours}h ${todayMins}m'
+                    : '${todayMins}m',
+              ),
+              _buildTimeMetric(
+                'This Week',
+                weekHours > 0 ? '${weekHours}h ${weekMins}m' : '${weekMins}m',
+              ),
+              _buildTimeMetric('This Month', '${monthHours}h'),
+            ],
+          ),
+          AppSpacing.gapMd,
+          Text(
+            '+$weekChange% vs last week',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
     );
-    final dayNames = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ];
-    final bestDay = dayNames[maxDay];
+  }
 
-    // final totalMinutes = weeklyData.reduce((a, b) => a + b);
-    final activeDays = weeklyData.where((m) => m > 0).length;
+  Widget _buildTimeMetric(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTextStyles.labelSmall.copyWith(
+            color: AppColors.white.withOpacity(0.6),
+          ),
+        ),
+        AppSpacing.gapXs,
+        Text(
+          value,
+          style: AppTextStyles.headlineMedium.copyWith(color: AppColors.white),
+        ),
+      ],
+    );
+  }
 
-    final insights = <_Insight>[];
+  Widget _buildSessionsCard(int today, int week, int month) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.slate800.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Sessions Completed',
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapLg,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildSessionMetric('Today', today),
+              _buildSessionMetric('This Week', week),
+              _buildSessionMetric('This Month', month),
+            ],
+          ),
+          AppSpacing.gapMd,
+          Text(
+            'High sessions + moderate time = good habit formation',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-    // Best day insight
-    if (weeklyData[maxDay] > 0) {
-      insights.add(
-        _Insight(
-          icon: Icons.star_outline,
-          text: '$bestDay is your most productive day',
-          color: AppColors.indigo400,
+  Widget _buildSessionMetric(String label, int count) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTextStyles.labelSmall.copyWith(
+            color: AppColors.white.withOpacity(0.6),
+          ),
         ),
-      );
-    }
+        AppSpacing.gapXs,
+        Text(
+          '$count',
+          style: AppTextStyles.headlineMedium.copyWith(color: AppColors.white),
+        ),
+      ],
+    );
+  }
 
-    // Consistency insight
-    if (activeDays >= 5) {
-      insights.add(
-        _Insight(
-          icon: Icons.check_circle_outline,
-          text: 'Great consistency: $activeDays days active',
-          color: AppColors.green400,
-        ),
-      );
-    } else if (activeDays >= 3) {
-      insights.add(
-        _Insight(
-          icon: Icons.trending_up,
-          text: 'Building consistency: $activeDays days active',
-          color: AppColors.amber400,
-        ),
-      );
-    }
+  Widget _buildAvgSessionCard(int avgMinutes) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.slate800.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Average Session Length',
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapMd,
+          Text(
+            '${avgMinutes}m',
+            style: AppTextStyles.displayMedium.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapSm,
+          Text(
+            'Indicates stamina and cognitive endurance',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-    // Quality insight
-    if (avgQuality >= 0.85) {
-      insights.add(
-        _Insight(
-          icon: Icons.psychology_outlined,
-          text: 'Maintaining high focus quality',
-          color: AppColors.green400,
-        ),
-      );
-    } else if (avgQuality < 0.6) {
-      insights.add(
-        _Insight(
-          icon: Icons.lightbulb_outline,
-          text: 'Try shorter sessions to improve quality',
-          color: AppColors.orange400,
-        ),
-      );
-    }
+  // SECTION 2 — Consistency Methods
 
-    // Empty state
-    if (insights.isEmpty) {
-      insights.add(
-        _Insight(
-          icon: Icons.insights_outlined,
-          text: 'Complete more sessions to see insights',
-          color: AppColors.gray400,
-        ),
-      );
-    }
+  Widget _buildActiveDaysCard(int activeDays) {
+    final totalDays = 30;
+    final percentage = (activeDays / totalDays * 100).round();
 
     return Container(
       width: double.infinity,
@@ -480,40 +456,355 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       decoration: BoxDecoration(
         color: AppColors.slate800.withOpacity(0.6),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.slate700),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: insights
-            .map(
-              (insight) => Padding(
-                padding: EdgeInsets.only(bottom: AppSpacing.md),
-                child: Row(
-                  children: [
-                    Icon(insight.icon, size: 20, color: insight.color),
-                    AppSpacing.gapMd,
-                    Expanded(
-                      child: Text(
-                        insight.text,
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.gray300,
-                        ),
-                      ),
-                    ),
-                  ],
+        children: [
+          Text(
+            'Active Days',
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapMd,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                '$activeDays',
+                style: AppTextStyles.displayMedium.copyWith(
+                  color: AppColors.white,
                 ),
               ),
-            )
-            .toList(),
+              Text(
+                ' / $totalDays days',
+                style: AppTextStyles.bodyLarge.copyWith(
+                  color: AppColors.white.withOpacity(0.6),
+                ),
+              ),
+            ],
+          ),
+          AppSpacing.gapMd,
+          LinearProgressIndicator(
+            value: activeDays / totalDays,
+            backgroundColor: AppColors.gray20,
+            valueColor: AlwaysStoppedAnimation(AppColors.white),
+            minHeight: 4,
+          ),
+          AppSpacing.gapMd,
+          Text(
+            '$percentage% adherence • $activeDays active days/month > 5 intense days',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
       ),
     );
   }
-}
 
-class _Insight {
-  final IconData icon;
-  final String text;
-  final Color color;
+  Widget _buildHeatmapCard(List<List<int>> heatmapData) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.slate800.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Calendar Heatmap',
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapMd,
+          _buildHeatmap(heatmapData),
+          AppSpacing.gapSm,
+          Text(
+            'Darker = more focus time',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  _Insight({required this.icon, required this.text, required this.color});
+  Widget _buildHeatmap(List<List<int>> data) {
+    return SizedBox(
+      height: 100,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(data.length, (weekIndex) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(7, (dayIndex) {
+              final intensity = data[weekIndex][dayIndex];
+              final color = _getHeatmapColor(intensity);
+              return Container(
+                width: 10,
+                height: 10,
+                margin: EdgeInsets.all(1),
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              );
+            }),
+          );
+        }),
+      ),
+    );
+  }
+
+  Color _getHeatmapColor(int minutes) {
+    if (minutes == 0) return AppColors.gray20;
+    if (minutes < 30) return AppColors.gray40;
+    if (minutes < 60) return AppColors.gray60;
+    if (minutes < 90) return AppColors.gray80;
+    return AppColors.white;
+  }
+
+  // SECTION 3 — Quality Methods
+
+  Widget _buildCompletionRateCard(double rate) {
+    final percentage = (rate * 100).round();
+    final insight = rate < 0.6
+        ? 'Low completion → session length too aggressive'
+        : rate > 0.9
+        ? 'Excellent completion rate'
+        : 'Good completion rate';
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.slate800.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Completion Rate',
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapMd,
+          Text(
+            '$percentage%',
+            style: AppTextStyles.displayMedium.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapMd,
+          LinearProgressIndicator(
+            value: rate,
+            backgroundColor: AppColors.gray20,
+            valueColor: AlwaysStoppedAnimation(AppColors.white),
+            minHeight: 4,
+          ),
+          AppSpacing.gapMd,
+          Text(
+            insight,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInterruptionCard(int trendPercentage) {
+    final isImproving = trendPercentage < 0;
+    final trendText = isImproving ? '$trendPercentage%' : '+$trendPercentage%';
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.slate800.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Interruptions',
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapMd,
+          Text(
+            '$trendText vs last week',
+            style: AppTextStyles.headlineMedium.copyWith(
+              color: AppColors.white,
+            ),
+          ),
+          AppSpacing.gapMd,
+          Text(
+            isImproving
+                ? 'Improving environmental resistance'
+                : 'Measures environmental resistance',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // SECTION 4 — Patterns Methods
+
+  Widget _buildBestTimeCard(String timeRange, List<int> hourlyData) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.slate800.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Best Focus Time',
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapMd,
+          Text(
+            'You focus best between $timeRange',
+            style: AppTextStyles.bodyLarge.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapLg,
+          _buildHourlyChart(hourlyData),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHourlyChart(List<int> data) {
+    final maxValue = data.reduce((a, b) => a > b ? a : b);
+
+    return SizedBox(
+      height: 60,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: List.generate(24, (hour) {
+          final value = data[hour];
+          final heightPercent = maxValue > 0 ? value / maxValue : 0.0;
+
+          return Container(
+            width: 8,
+            height: 60 * heightPercent,
+            decoration: BoxDecoration(
+              color: AppColors.white.withOpacity(0.3 + (0.7 * heightPercent)),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildWeeklyTrendCard(List<int> weeklyData) {
+    final dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    final maxValue = weeklyData.reduce((a, b) => a > b ? a : b);
+    final minDay = weeklyData.indexOf(
+      weeklyData.reduce((a, b) => a < b ? a : b),
+    );
+
+    String insight = '';
+    if (minDay == 0) {
+      insight = 'Mondays weak → planning issue';
+    } else if (minDay == 4)
+      insight = 'Fridays weak → fatigue issue';
+    else
+      insight = 'Detects work-life rhythm';
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.slate800.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Weekly Trend',
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+          ),
+          AppSpacing.gapLg,
+          SizedBox(
+            height: 120,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: List.generate(7, (index) {
+                final value = weeklyData[index];
+                final heightPercent = maxValue > 0 ? value / maxValue : 0.0;
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      '${value}m',
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: AppColors.white.withOpacity(0.6),
+                        fontSize: 10,
+                      ),
+                    ),
+                    AppSpacing.gapXs,
+                    Container(
+                      width: 32,
+                      height: 80 * heightPercent,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    AppSpacing.gapXs,
+                    Text(
+                      dayNames[index],
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: AppColors.white.withOpacity(0.6),
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            ),
+          ),
+          AppSpacing.gapMd,
+          Text(
+            insight,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Mock data generators
+  List<List<int>> _generateMockHeatmapData() {
+    return List.generate(
+      12,
+      (week) => List.generate(7, (day) => (week * day * 5) % 120),
+    );
+  }
+
+  List<int> _generateMockHourlyData() {
+    final peak = [6, 7, 8, 9, 10]; // Peak hours
+    return List.generate(24, (hour) {
+      if (peak.contains(hour)) return 80 + (hour % 3) * 10;
+      if (hour < 6 || hour > 22) return 0;
+      if (hour > 12 && hour < 14) return 30; // Lunch dip
+      return 40 + (hour % 5) * 8;
+    });
+  }
 }

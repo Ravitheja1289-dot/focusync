@@ -227,7 +227,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Text(
         title.toUpperCase(),
         style: AppTextStyles.bodySmall.copyWith(
-          color: AppColors.gray500,
+          color: AppColors.white,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
         ),
@@ -240,7 +240,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       decoration: BoxDecoration(
         color: AppColors.slate900,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.slate800, width: 1),
+        // No border - unnecessary
       ),
       child: Column(children: children),
     );
@@ -274,14 +274,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: AppTextStyles.bodySmall.copyWith(color: AppColors.gray400),
           ),
         ),
-        trailing: Switch(
-          value: value,
-          onChanged: enabled ? onChanged : null,
-          activeThumbColor: AppColors.indigo500,
-          activeTrackColor: AppColors.indigo500.withOpacity(0.3),
-          inactiveThumbColor: AppColors.gray400,
-          inactiveTrackColor: AppColors.slate700,
-        ),
+        trailing: Switch(value: value, onChanged: enabled ? onChanged : null),
       ),
     );
   }
@@ -318,11 +311,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
         ),
-        trailing: Icon(
-          Icons.chevron_right,
-          color: destructive ? AppColors.red400 : AppColors.gray500,
-          size: 20,
-        ),
+        trailing: null, // No chevron icon - unnecessary decoration
         onTap: enabled ? onTap : null,
       ),
     );
@@ -350,7 +339,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         content: Text(
           'Your focus history will be exported as a JSON file. This file contains all your session data and can be imported later.',
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray300),
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray80),
         ),
         actions: [
           TextButton(
@@ -405,7 +394,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         content: Text(
           'This will permanently delete all your focus sessions, analytics, and settings. This action cannot be undone.',
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray300),
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray80),
         ),
         actions: [
           TextButton(

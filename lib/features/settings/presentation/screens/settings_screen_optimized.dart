@@ -275,7 +275,7 @@ class _DataControlsSectionState extends State<_DataControlsSection> {
         ),
         content: Text(
           'Your focus history will be exported as a JSON file. This file contains all your session data and can be imported later.',
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray300),
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray80),
         ),
         actions: [
           TextButton(
@@ -330,7 +330,7 @@ class _DataControlsSectionState extends State<_DataControlsSection> {
         ),
         content: Text(
           'This will permanently delete all your focus sessions, analytics, and settings. This action cannot be undone.',
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray300),
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray80),
         ),
         actions: [
           TextButton(
@@ -436,7 +436,7 @@ class _SettingsHeader extends StatelessWidget {
       child: Text(
         title.toUpperCase(),
         style: AppTextStyles.bodySmall.copyWith(
-          color: AppColors.gray500,
+          color: AppColors.gray50,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
         ),
@@ -558,7 +558,7 @@ class _NavigationSetting extends StatelessWidget {
         ),
         trailing: Icon(
           Icons.chevron_right,
-          color: destructive ? AppColors.red400 : AppColors.gray500,
+          color: destructive ? AppColors.red400 : AppColors.gray50,
           size: 20,
         ),
         onTap: enabled ? onTap : null,

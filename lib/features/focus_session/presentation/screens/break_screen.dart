@@ -43,6 +43,12 @@ class _BreakScreenState extends ConsumerState<BreakScreen> {
     Navigator.of(context).pop();
   }
 
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes;
+    final seconds = duration.inSeconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
   void _showSkipConfirmation() {
     showModalBottomSheet(
       context: context,
@@ -65,11 +71,7 @@ class _BreakScreenState extends ConsumerState<BreakScreen> {
       return const SizedBox.shrink();
     }
 
-    final remainingSeconds = session.remainingDuration.inSeconds;
-    final minutes = remainingSeconds ~/ 60;
-    final seconds = remainingSeconds % 60;
-    final timeText =
-        '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    final timeText = _formatDuration(session.remainingDuration);
 
     return Scaffold(
       backgroundColor: AppColors.slate900,
@@ -86,8 +88,8 @@ class _BreakScreenState extends ConsumerState<BreakScreen> {
                   // Break title
                   Text(
                     'Take a break',
-                    style: AppTextStyles.displaySmall.copyWith(
-                      color: AppColors.gray400,
+                    style: AppTextStyles.displayLarge.copyWith(
+                      color: AppColors.gray40,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
@@ -98,8 +100,8 @@ class _BreakScreenState extends ConsumerState<BreakScreen> {
                   Text(
                     timeText,
                     style: AppTextStyles.headlineLarge.copyWith(
-                      color: AppColors.gray200,
-                      fontFamily: AppTextStyles.displayFont,
+                      color: AppColors.gray80,
+                      fontFamily: 'Inter',
                     ),
                   ),
 
@@ -115,7 +117,7 @@ class _BreakScreenState extends ConsumerState<BreakScreen> {
                   TextButton(
                     onPressed: _showSkipConfirmation,
                     style: TextButton.styleFrom(
-                      foregroundColor: AppColors.gray500,
+                      foregroundColor: AppColors.gray50,
                       padding: EdgeInsets.symmetric(
                         horizontal: AppSpacing.lg,
                         vertical: AppSpacing.md,
@@ -124,7 +126,7 @@ class _BreakScreenState extends ConsumerState<BreakScreen> {
                     child: Text(
                       'Skip break',
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.gray500,
+                        color: AppColors.gray50,
                       ),
                     ),
                   ),
@@ -134,40 +136,7 @@ class _BreakScreenState extends ConsumerState<BreakScreen> {
               ),
             ),
 
-            // Top bar (minimal)
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.sm,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSpacing.sm,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.slate800.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        'BREAK TIME',
-                        style: AppTextStyles.labelSmall.copyWith(
-                          color: AppColors.gray400,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Top bar removed - time display alone is sufficient
           ],
         ),
       ),
@@ -193,19 +162,16 @@ class _SkipBreakBottomSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.info_outline, size: 48, color: AppColors.indigo400),
-
-          AppSpacing.gapMd,
-
+          // No decorative icon
           Text(
-            'Skip your break?',
+            'Skip break?',
             style: AppTextStyles.headlineSmall.copyWith(color: AppColors.white),
           ),
 
-          AppSpacing.gapSm,
+          const SizedBox(height: 8),
 
           Text(
-            'Regular breaks help maintain focus and prevent burnout. Consider staying for the full break.',
+            'Breaks help maintain focus.',
             textAlign: TextAlign.center,
             style: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray400),
           ),
@@ -234,7 +200,7 @@ class _SkipBreakBottomSheet extends StatelessWidget {
                   },
                   style: FilledButton.styleFrom(
                     minimumSize: const Size(0, 48),
-                    backgroundColor: AppColors.gray700,
+                    backgroundColor: AppColors.gray70,
                   ),
                   child: const Text('Skip Break'),
                 ),

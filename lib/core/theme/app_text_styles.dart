@@ -61,170 +61,212 @@ class AppTextStyles {
   );
 
   // ============================================================================
-  // TITLE STYLES (Screen Titles, Card Headers)
+  // LEVEL 2: HEADLINE (Page Titles, Section Headers)
   // ============================================================================
+  // Purpose: Structural navigation - tells user where they are
+  // Why it exists: Provides spatial orientation and content organization
+  // Usage: Screen titles, major section headers
+  // Characteristics: Semi-bold weight for clarity, normal tracking for readability
 
-  /// 22px - Screen titles
-  static const titleLarge = TextStyle(
-    fontFamily: bodyFont,
-    fontSize: 22,
-    height: 1.27, // 28px line height
-    fontWeight: FontWeight.w600,
-    letterSpacing: 0,
-    color: AppColors.gray50,
+  /// 32px - Page title (primary headline)
+  /// Used for: Screen headers (Analytics, Settings), modal titles
+  static const headlineLarge = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 32,
+    height: 1.25, // 40px line height (comfortable breathing room)
+    fontWeight: FontWeight.w600, // Semi-bold - establishes hierarchy
+    letterSpacing: -0.5, // Slight tightening for elegance
+    color: AppColors.textPrimary,
   );
 
-  /// 18px - Card titles, section headers
-  static const titleMedium = TextStyle(
-    fontFamily: bodyFont,
+  /// 24px - Section header (secondary headline)
+  /// Used for: Major sections (Today, This Week, Insights)
+  static const headlineMedium = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 24,
+    height: 1.33, // 32px line height
+    fontWeight: FontWeight.w600, // Semi-bold
+    letterSpacing: 0,
+    color: AppColors.textPrimary,
+  );
+
+  /// 18px - Subsection header (tertiary headline)
+  /// Used for: Card titles, grouped content headers
+  static const headlineSmall = TextStyle(
+    fontFamily: primaryFont,
     fontSize: 18,
-    height: 1.33, // 24px line height
-    fontWeight: FontWeight.w600,
+    height: 1.44, // 26px line height
+    fontWeight: FontWeight.w500, // Medium - softer than primary headlines
     letterSpacing: 0,
-    color: AppColors.gray50,
-  );
-
-  /// 16px - List item titles, small headers
-  static const titleSmall = TextStyle(
-    fontFamily: bodyFont,
-    fontSize: 16,
-    height: 1.38, // 22px line height
-    fontWeight: FontWeight.w600,
-    letterSpacing: 0,
-    color: AppColors.gray50,
+    color: AppColors.textPrimary,
   );
 
   // ============================================================================
-  // BODY STYLES (Paragraphs, Descriptions)
+  // LEVEL 3: BODY (Primary Reading Content)
   // ============================================================================
+  // Purpose: Main communication layer - explanations, descriptions, instructions
+  // Why it exists: Delivers information with optimal readability
+  // Usage: Paragraphs, list items, card content, dialog text
+  // Characteristics: Regular weight, generous line height (1.5-1.6) for calm reading
 
-  /// 17px - Primary body text (iOS standard)
+  /// 16px - Primary body text
+  /// Used for: Main content, paragraphs, descriptions, button text
+  /// Line height: 1.5 (24px) - optimal for reading comfort and calm scanning
   static const bodyLarge = TextStyle(
-    fontFamily: bodyFont,
-    fontSize: 17,
-    height: 1.41, // 24px line height
-    fontWeight: FontWeight.w400,
+    fontFamily: primaryFont,
+    fontSize: 16,
+    height: 1.5, // 24px - generous for calm reading
+    fontWeight: FontWeight.w400, // Regular - neutral weight
     letterSpacing: 0,
-    color: AppColors.gray50,
+    color: AppColors.textPrimary,
   );
 
-  /// 15px - Secondary body text, descriptions
+  /// 14px - Secondary body text
+  /// Used for: Supporting descriptions, list item details, secondary content
   static const bodyMedium = TextStyle(
-    fontFamily: bodyFont,
-    fontSize: 15,
-    height: 1.33, // 20px line height
-    fontWeight: FontWeight.w400,
-    letterSpacing: 0,
-    color: AppColors.gray200,
-  );
-
-  /// 13px - Small body text, captions
-  static const bodySmall = TextStyle(
-    fontFamily: bodyFont,
-    fontSize: 13,
-    height: 1.38, // 18px line height
-    fontWeight: FontWeight.w400,
-    letterSpacing: 0,
-    color: AppColors.gray400,
-  );
-
-  // ============================================================================
-  // LABEL STYLES (Buttons, Input Labels, Tags)
-  // ============================================================================
-
-  /// 14px - Primary buttons, large labels
-  static const labelLarge = TextStyle(
-    fontFamily: bodyFont,
+    fontFamily: primaryFont,
     fontSize: 14,
-    height: 1.43, // 20px line height
-    fontWeight: FontWeight.w500,
-    letterSpacing: 0.5,
-    color: AppColors.gray50,
+    height: 1.57, // 22px - proportionally more leading for smaller size
+    fontWeight: FontWeight.w400, // Regular
+    letterSpacing: 0,
+    color: AppColors.textPrimary,
   );
 
-  /// 12px - Secondary buttons, chips, input labels
-  static const labelMedium = TextStyle(
-    fontFamily: bodyFont,
+  /// 12px - Tertiary body text
+  /// Used for: Captions, fine print, supplementary information
+  static const bodySmall = TextStyle(
+    fontFamily: primaryFont,
     fontSize: 12,
-    height: 1.33, // 16px line height
-    fontWeight: FontWeight.w500,
-    letterSpacing: 0.5,
-    color: AppColors.gray200,
-  );
-
-  /// 11px - Small labels, uppercase tags
-  static const labelSmall = TextStyle(
-    fontFamily: bodyFont,
-    fontSize: 11,
-    height: 1.27, // 14px line height
-    fontWeight: FontWeight.w500,
-    letterSpacing: 0.8,
-    color: AppColors.gray400,
+    height: 1.5, // 18px
+    fontWeight: FontWeight.w400, // Regular
+    letterSpacing: 0.2, // Slight opening for legibility at small size
+    color: AppColors.textPrimary,
   );
 
   // ============================================================================
-  // MONOSPACE STYLES (Time Inputs, Technical)
+  // LEVEL 4: MICROTEXT (Metadata, Labels, UI Elements)
   // ============================================================================
+  // Purpose: Supporting information - timestamps, labels, UI guidance
+  // Why it exists: Provides context without competing with primary content
+  // Usage: Timestamps, field labels, status text, button labels, badges
+  // Characteristics: Slightly heavier weight (medium) for clarity, wider tracking
 
-  /// 17px - Time inputs, duration displays
-  static const monoLarge = TextStyle(
-    fontFamily: monoFont,
-    fontSize: 17,
-    height: 1.41,
+  /// 14px - Button labels, form labels
+  /// Used for: Interactive element text (buttons, tabs), input field labels
+  static const microLarge = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 14,
+    height: 1.43, // 20px
+    fontWeight: FontWeight.w500, // Medium - slightly heavier for UI clarity
+    letterSpacing: 0.3, // Slight opening for scannability
+    color: AppColors.textPrimary,
+  );
+
+  /// 12px - Metadata, timestamps
+  /// Used for: Timestamps ("2 hours ago"), stat labels ("Focus Quality")
+  static const microMedium = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 12,
+    height: 1.33, // 16px
+    fontWeight: FontWeight.w500, // Medium
+    letterSpacing: 0.4,
+    color: AppColors.textPrimary,
+  );
+
+  /// 10px - Tiny labels, badges
+  /// Used for: Ultra-compact UI elements, badges, notification counts
+  static const microSmall = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 10,
+    height: 1.4, // 14px
+    fontWeight: FontWeight.w500, // Medium - maintains legibility
+    letterSpacing: 0.5, // More tracking needed at tiny sizes
+    color: AppColors.textPrimary,
+  );
+
+  // ============================================================================
+  // SPECIAL PURPOSE: MONOSPACE (Timer Inputs Only)
+  // ============================================================================
+  // Purpose: Fixed-width numbers for time entry and technical precision
+  // Why it exists: Prevents layout jump when digits change (25:00 → 24:59)
+  // Usage: ONLY for timer input fields - NOT for display timer
+  // Note: Could be eliminated by using tabular figures in Inter
+
+  /// 16px - Time input fields (HH:MM format)
+  /// Used for: Manual time entry in session setup
+  static const monoInput = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 16,
+    height: 1.5,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
-    color: AppColors.gray50,
+    fontFeatures: [FontFeature.tabularFigures()], // Use Inter's tabular nums
+    color: AppColors.textPrimary,
   );
 
-  /// 14px - Small technical text
-  static const monoMedium = TextStyle(
-    fontFamily: monoFont,
+  // ============================================================================
+  // DEPRECATED (Backwards Compatibility)
+  // ============================================================================
+  // These styles maintain compatibility with existing code
+  // Prefer using new hierarchy: displayHero, headlineLarge, bodyLarge, microLarge
+
+  @Deprecated('Use headlineLarge instead')
+  static const titleLarge = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 22,
+    height: 1.27,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0,
+    color: AppColors.textPrimary,
+  );
+
+  @Deprecated('Use headlineMedium instead')
+  static const titleMedium = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 18,
+    height: 1.33,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0,
+    color: AppColors.textPrimary,
+  );
+
+  @Deprecated('Use headlineSmall instead')
+  static const titleSmall = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 16,
+    height: 1.38,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0,
+    color: AppColors.textPrimary,
+  );
+
+  @Deprecated('Use microLarge instead')
+  static const labelLarge = TextStyle(
+    fontFamily: primaryFont,
     fontSize: 14,
     height: 1.43,
-    fontWeight: FontWeight.w400,
-    letterSpacing: 0,
-    color: AppColors.gray200,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+    color: AppColors.textPrimary,
   );
 
-  // ============================================================================
-  // SEMANTIC VARIANTS (Quick color overrides)
-  // ============================================================================
+  @Deprecated('Use microMedium instead')
+  static const labelMedium = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 12,
+    height: 1.33,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+    color: AppColors.textSecondary,
+  );
 
-  /// Error text styling
-  static TextStyle get error => bodyMedium.copyWith(color: AppColors.error);
-
-  /// Success text styling
-  static TextStyle get success => bodyMedium.copyWith(color: AppColors.success);
-
-  /// Warning text styling
-  static TextStyle get warning => bodyMedium.copyWith(color: AppColors.warning);
-
-  /// Info text styling
-  static TextStyle get info => bodyMedium.copyWith(color: AppColors.info);
-
-  /// Primary brand text (indigo)
-  static TextStyle get primary =>
-      bodyMedium.copyWith(color: AppColors.indigo500);
-
-  // ============================================================================
-  // HEADLINE ALIASES (for backwards compatibility)
-  // ============================================================================
-
-  /// 48px - Alias for displayLarge
-  static const headlineLarge = displayLarge;
-
-  /// 36px - Alias for displayMedium
-  static const headlineMedium = displayMedium;
-
-  /// 28px - Alias for displaySmall
-  static const headlineSmall = displaySmall;
-
-  // ============================================================================
-  // UTILITY EXTENSIONS
-  // ============================================================================
-
-  /// Helper to convert any TextStyle to uppercase with appropriate spacing
-  static TextStyle uppercase(TextStyle base) {
-    return base.copyWith(letterSpacing: (base.letterSpacing ?? 0) + 0.8);
-  }
+  @Deprecated('Use microSmall instead')
+  static const labelSmall = TextStyle(
+    fontFamily: primaryFont,
+    fontSize: 11,
+    height: 1.27,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.8,
+    color: AppColors.textTertiary,
+  );
 }

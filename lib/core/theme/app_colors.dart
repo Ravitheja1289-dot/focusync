@@ -200,6 +200,37 @@ class AppColors {
   static const chartGrid = gray20;
 
   // ============================================================================
+  // ACCENT COLORS (Minimal, Calm)
+  // ============================================================================
+
+  /// Primary accent - Indigo (calm, focused)
+  static const indigo500 = Color(0xFF6C6FF7);
+  static const indigo400 = Color(0xFF8B8EF9);
+  static const indigo300 = Color(0xFFAAABFB);
+  static const indigo600 = Color(0xFF5558E3);
+  static const indigo900 = Color(0xFF2A2D8F);
+
+  /// Success/positive state - Green
+  static const green500 = Color(0xFF10B981);
+  static const green400 = Color(0xFF34D399);
+
+  /// Error/destructive state - Red
+  static const red500 = Color(0xFFEF4444);
+  static const red400 = Color(0xFFF87171);
+
+  /// Warning state - Amber/Orange
+  static const warning = Color(0xFFFBBF24);
+
+  /// Info/neutral state - Blue
+  static const blue400 = Color(0xFF60A5FA);
+
+  /// Error alias
+  static const error = red500;
+
+  /// Card/surface background
+  static const cardBackground = gray10;
+
+  // ============================================================================
   // DEPRECATED (Backwards Compatibility - DO NOT USE)
   // ============================================================================
 
@@ -215,51 +246,14 @@ class AppColors {
   @Deprecated('Use borderDefault instead')
   static const slate700 = gray40;
 
-  @Deprecated('Use textPrimary instead')
-  static const gray50 = white;
+  // gray50 already defined above - this deprecated alias removed
 
   @Deprecated('Use textSecondary instead')
-  static const gray200 = gray50;
+  static const gray200 = gray80; // Changed from gray50 to avoid duplicate
 
   @Deprecated('Use textTertiary instead')
   static const gray400 = gray40;
 
   @Deprecated('Use borderDefault instead')
   static const gray600 = gray40;
-
-  @Deprecated('Color removed - use grayscale only')
-  static const indigo500 = Color(0xFF808080); // Fallback to gray
-
-  @Deprecated('Color removed - use grayscale only')
-  static const indigo400 = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const indigo600 = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const indigo900 = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const success = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const error = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const warning = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const info = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const amber = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const green400 = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const blue400 = Color(0xFF808080);
-
-  @Deprecated('Color removed - use grayscale only')
-  static const red400 = Color(0xFF808080);
 }

@@ -82,7 +82,7 @@ class _CircularFocusTimerState extends State<CircularFocusTimer>
     _colorAnimation = ColorTween(
       begin: _getColorForState(widget.state),
       end: _getColorForState(widget.state),
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
   }
 
   @override
@@ -99,13 +99,13 @@ class _CircularFocusTimerState extends State<CircularFocusTimer>
       _controller.forward(from: 0.0);
     }
 
-    // Animate color changes on state change
+    // Animate color changes on state change (linear for minimal motion)
     if (oldWidget.state != widget.state) {
       _previousColor = _colorAnimation.value ?? _previousColor;
       _colorAnimation = ColorTween(
         begin: _previousColor,
         end: _getColorForState(widget.state),
-      ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+      ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
       _controller.forward(from: 0.0);
     }
   }
@@ -116,32 +116,25 @@ class _CircularFocusTimerState extends State<CircularFocusTimer>
     super.dispose();
   }
 
-  /// Get ring color based on timer state
+  /// Get ring color based on timer state (frozen minimal design)
   Color _getColorForState(TimerState state) {
     switch (state) {
       case TimerState.idle:
-        return AppColors.indigo500;
+        return AppColors.white; // White (unused - idle handled by home screen)
       case TimerState.focus:
-        return AppColors.indigo500;
+        return AppColors.white; // Pure white for running state (21:1 contrast)
       case TimerState.breakTime:
-        return AppColors.success;
+        return AppColors.white; // White (no color distinction)
       case TimerState.paused:
-        return AppColors.indigo400;
+        return AppColors.gray60; // Gray60 for paused (12.5:1 contrast)
     }
   }
 
-  /// Get background circle color based on state
+  /// Get background circle color based on state (frozen minimal design)
   Color _getBackgroundColorForState(TimerState state) {
-    switch (state) {
-      case TimerState.idle:
-        return AppColors.slate800;
-      case TimerState.focus:
-        return AppColors.slate900;
-      case TimerState.breakTime:
-        return AppColors.slate900;
-      case TimerState.paused:
-        return AppColors.slate800;
-    }
+    // No visible background ring in minimal design
+    // Return transparent to eliminate background circle
+    return Colors.transparent;
   }
 
   @override
@@ -198,14 +191,16 @@ class _CircularTimerPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - strokeWidth) / 2;
 
-    // Draw background circle (full ring)
-    final backgroundPaint = Paint()
-      ..color = backgroundColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
+    // Draw background circle only if not transparent (minimal design optimization)
+    if (backgroundColor.opacity > 0.0) {
+      final backgroundPaint = Paint()
+        ..color = backgroundColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..strokeCap = StrokeCap.round;
 
-    canvas.drawCircle(center, radius, backgroundPaint);
+      canvas.drawCircle(center, radius, backgroundPaint);
+    }
 
     // Draw progress arc
     if (progress > 0.0) {

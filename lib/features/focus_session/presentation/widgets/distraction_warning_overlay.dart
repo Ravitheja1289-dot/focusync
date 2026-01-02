@@ -73,11 +73,11 @@ class _DistractionWarningOverlayState extends State<DistractionWarningOverlay>
 
   Color _getWarningColor() {
     if (widget.distractionCount <= 2) {
-      return AppColors.amber400;
+      return AppColors.gray60;
     } else if (widget.distractionCount <= 5) {
-      return AppColors.orange400;
+      return AppColors.gray70;
     } else {
-      return AppColors.red400;
+      return AppColors.gray80;
     }
   }
 

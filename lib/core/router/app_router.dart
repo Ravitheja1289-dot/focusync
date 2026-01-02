@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'app_routes.dart';
 import 'app_page_transitions.dart';
+import '../theme/app_colors.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/analytics/presentation/screens/analytics_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/account/presentation/screens/account_screen.dart';
+import '../../features/auth/presentation/screens/lock_screen.dart';
 import '../../features/splash/splash_screen.dart';
 
 // TODO: Import actual screens when they're created
@@ -18,10 +21,21 @@ class AppRouter {
 
   /// Global router instance
   static final GoRouter router = GoRouter(
-    initialLocation: '/splash',
+    initialLocation: '/lock',
     debugLogDiagnostics: true,
 
     routes: [
+      // ========================================================================
+      // LOCK SCREEN (Initial Entry)
+      // ========================================================================
+      GoRoute(
+        path: '/lock',
+        pageBuilder: (context, state) => AppPageTransitions.fade(
+          child: const LockScreen(),
+          context: context,
+        ),
+      ),
+
       // ========================================================================
       // SPLASH SCREEN
       // ========================================================================
@@ -38,35 +52,31 @@ class AppRouter {
       // ========================================================================
       ShellRoute(
         builder: (context, state, child) {
-          // TODO: Replace with actual MainScaffold with bottom nav
           return _MainScaffold(child: child);
         },
         routes: [
           // Home screen
           GoRoute(
             path: AppRoutes.home,
-            pageBuilder: (context, state) => AppPageTransitions.smoothBlend(
-              child: const HomeScreen(),
-              context: context,
-            ),
+            builder: (context, state) => const HomeScreen(),
           ),
 
           // History screen
           GoRoute(
             path: AppRoutes.history,
-            pageBuilder: (context, state) => AppPageTransitions.fade(
-              child: const AnalyticsScreen(),
-              context: context,
-            ),
+            builder: (context, state) => const AnalyticsScreen(),
           ),
 
           // Settings screen
           GoRoute(
             path: AppRoutes.settings,
-            pageBuilder: (context, state) => AppPageTransitions.fade(
-              child: const SettingsScreen(),
-              context: context,
-            ),
+            builder: (context, state) => const SettingsScreen(),
+          ),
+
+          // Account screen
+          GoRoute(
+            path: AppRoutes.account,
+            builder: (context, state) => const AccountScreen(),
           ),
         ],
       ),
@@ -118,17 +128,12 @@ class AppRouter {
 // =============================================================================
 
 /// Temporary main scaffold with bottom navigation
-class _MainScaffold extends StatefulWidget {
+class _MainScaffold extends StatelessWidget {
   const _MainScaffold({required this.child});
 
   final Widget child;
 
-  @override
-  State<_MainScaffold> createState() => _MainScaffoldState();
-}
-
-class _MainScaffoldState extends State<_MainScaffold> {
-  void _onItemTapped(int index) {
+  void _onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
         context.go(AppRoutes.home);
@@ -139,26 +144,28 @@ class _MainScaffoldState extends State<_MainScaffold> {
       case 2:
         context.go(AppRoutes.settings);
         break;
+      case 3:
+        context.go(AppRoutes.account);
+        break;
     }
+  }
+
+  int _getSelectedIndex(BuildContext context) {
+    final location = GoRouterState.of(context).uri.path;
+    if (location == AppRoutes.home) return 0;
+    if (location == AppRoutes.history) return 1;
+    if (location == AppRoutes.settings) return 2;
+    if (location == AppRoutes.account) return 3;
+    return 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    // Determine selected index from location without setState
-    final location = GoRouterState.of(context).uri.path;
-    final selectedIndex = location == AppRoutes.home
-        ? 0
-        : location == AppRoutes.history
-        ? 1
-        : location == AppRoutes.settings
-        ? 2
-        : 0;
-
     return Scaffold(
-      body: widget.child,
+      body: child,
       bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        onDestinationSelected: _onItemTapped,
+        selectedIndex: _getSelectedIndex(context),
+        onDestinationSelected: (index) => _onItemTapped(context, index),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
@@ -174,6 +181,11 @@ class _MainScaffoldState extends State<_MainScaffold> {
             icon: Icon(Icons.settings_outlined),
             selectedIcon: Icon(Icons.settings),
             label: 'Settings',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outlined),
+            selectedIcon: Icon(Icons.person),
+            label: 'Account',
           ),
         ],
       ),

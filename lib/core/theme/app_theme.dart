@@ -22,36 +22,35 @@ class AppTheme {
 
     // Color scheme
     colorScheme: const ColorScheme.dark(
-      primary: AppColors.indigo500,
-      primaryContainer: AppColors.indigo900,
-      secondary: AppColors.indigo400,
-      secondaryContainer: AppColors.slate800,
-      surface: AppColors.slate900,
-      error: AppColors.error,
-      onPrimary: AppColors.gray50,
-      onSecondary: AppColors.gray50,
-      onSurface: AppColors.gray50,
-      onError: AppColors.gray50,
-      outline: AppColors.slate700,
-      outlineVariant: AppColors.gray600,
+      primary: AppColors.textPrimary, // white
+      primaryContainer: AppColors.backgroundSecondary, // gray10
+      secondary: AppColors.textSecondary, // gray50
+      secondaryContainer: AppColors.backgroundTertiary, // gray20
+      surface: AppColors.backgroundSecondary, // gray10
+      error: AppColors.textPrimary, // white (no red)
+      onPrimary: AppColors.textInverted, // black
+      onSecondary: AppColors.textPrimary, // white
+      onSurface: AppColors.textPrimary, // white
+      onError: AppColors.textPrimary, // white
+      outline: AppColors.borderDefault, // gray40
+      outlineVariant: AppColors.borderSubtle, // gray30
     ),
 
     // Scaffold
-    scaffoldBackgroundColor: AppColors.slate950,
-
+    scaffoldBackgroundColor: AppColors.backgroundPrimary, // black
     // App bar
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.slate950,
-      foregroundColor: AppColors.gray50,
+      backgroundColor: AppColors.backgroundPrimary, // black
+      foregroundColor: AppColors.textPrimary, // white
       elevation: 0,
       centerTitle: false,
-      titleTextStyle: AppTextStyles.titleLarge,
+      titleTextStyle: AppTextStyles.headlineMedium, // updated style
       systemOverlayStyle: SystemUiOverlayStyle.light,
     ),
 
     // Card
     cardTheme: CardThemeData(
-      color: AppColors.slate900,
+      color: AppColors.backgroundSecondary, // gray10
       elevation: 0,
       shadowColor: Colors.black,
       shape: RoundedRectangleBorder(borderRadius: AppSpacing.cardRadius),
@@ -65,7 +64,7 @@ class AppTheme {
     textTheme: const TextTheme(
       displayLarge: AppTextStyles.displayLarge,
       displayMedium: AppTextStyles.displayMedium,
-      displaySmall: AppTextStyles.displaySmall,
+      // displaySmall removed - use displayLarge or displayMedium instead
       headlineLarge: AppTextStyles.titleLarge,
       headlineMedium: AppTextStyles.titleMedium,
       headlineSmall: AppTextStyles.titleSmall,
@@ -83,43 +82,46 @@ class AppTheme {
     // Elevated button
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.indigo500,
-        foregroundColor: AppColors.gray50,
+        backgroundColor: AppColors.surfaceActive, // white
+        foregroundColor: AppColors.textInverted, // black
         elevation: 0,
         padding: AppSpacing.buttonPadding,
         minimumSize: const Size(0, AppSpacing.buttonHeight),
         shape: RoundedRectangleBorder(borderRadius: AppSpacing.buttonRadius),
-        textStyle: AppTextStyles.labelLarge,
+        textStyle: AppTextStyles.microLarge,
       ),
     ),
 
     // Text button
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: AppColors.indigo400,
+        foregroundColor: AppColors.textPrimary, // white
         padding: AppSpacing.buttonPaddingSmall,
         minimumSize: const Size(0, AppSpacing.buttonHeightSmall),
         shape: RoundedRectangleBorder(borderRadius: AppSpacing.buttonRadius),
-        textStyle: AppTextStyles.labelLarge,
+        textStyle: AppTextStyles.microLarge,
       ),
     ),
 
     // Outlined button
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.gray50,
-        side: const BorderSide(color: AppColors.slate700, width: 1),
+        foregroundColor: AppColors.textPrimary, // white
+        side: const BorderSide(
+          color: AppColors.borderDefault,
+          width: 1,
+        ), // gray40
         padding: AppSpacing.buttonPadding,
         minimumSize: const Size(0, AppSpacing.buttonHeight),
         shape: RoundedRectangleBorder(borderRadius: AppSpacing.buttonRadius),
-        textStyle: AppTextStyles.labelLarge,
+        textStyle: AppTextStyles.microLarge,
       ),
     ),
 
     // Floating action button
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: AppColors.indigo500,
-      foregroundColor: AppColors.gray50,
+      backgroundColor: AppColors.surfaceActive, // white
+      foregroundColor: AppColors.textInverted, // black
       elevation: 0,
       shape: CircleBorder(),
     ),
@@ -127,7 +129,7 @@ class AppTheme {
     // Icon button
     iconButtonTheme: IconButtonThemeData(
       style: IconButton.styleFrom(
-        foregroundColor: AppColors.gray50,
+        foregroundColor: AppColors.textPrimary, // white
         minimumSize: const Size(
           AppSpacing.iconButtonSize,
           AppSpacing.iconButtonSize,
@@ -138,44 +140,54 @@ class AppTheme {
     // Input decoration
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.slate800,
+      fillColor: AppColors.backgroundSecondary, // gray10
       border: OutlineInputBorder(
         borderRadius: AppSpacing.buttonRadius,
-        borderSide: const BorderSide(color: AppColors.slate700, width: 1),
+        borderSide: const BorderSide(color: AppColors.borderDefault, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: AppSpacing.buttonRadius,
-        borderSide: const BorderSide(color: AppColors.slate700, width: 1),
+        borderSide: const BorderSide(color: AppColors.borderDefault, width: 1),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: AppSpacing.buttonRadius,
-        borderSide: const BorderSide(color: AppColors.indigo500, width: 2),
+        borderSide: const BorderSide(
+          color: AppColors.borderStrong,
+          width: 2,
+        ), // white
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: AppSpacing.buttonRadius,
-        borderSide: const BorderSide(color: AppColors.error, width: 1),
+        borderSide: const BorderSide(
+          color: AppColors.borderStrong,
+          width: 1,
+        ), // white (no red)
       ),
       contentPadding: AppSpacing.buttonPadding,
-      hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.gray400),
-      labelStyle: AppTextStyles.labelMedium.copyWith(color: AppColors.gray200),
+      hintStyle: AppTextStyles.bodyMedium.copyWith(
+        color: AppColors.textPrimary,
+      ),
+      labelStyle: AppTextStyles.microMedium.copyWith(
+        color: AppColors.textPrimary,
+      ),
     ),
 
     // Chip
     chipTheme: ChipThemeData(
-      backgroundColor: AppColors.slate800,
-      selectedColor: AppColors.indigo900,
-      disabledColor: AppColors.slate700,
-      labelStyle: AppTextStyles.labelMedium,
+      backgroundColor: AppColors.backgroundSecondary, // gray10
+      selectedColor: AppColors.backgroundTertiary, // gray20
+      disabledColor: AppColors.backgroundSecondary, // gray10
+      labelStyle: AppTextStyles.microMedium,
       padding: AppSpacing.chipPadding,
       shape: RoundedRectangleBorder(borderRadius: AppSpacing.chipRadius),
     ),
 
     // Dialog
     dialogTheme: DialogThemeData(
-      backgroundColor: AppColors.slate900,
+      backgroundColor: AppColors.backgroundSecondary, // gray10
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: AppSpacing.largeRadius),
-      titleTextStyle: AppTextStyles.titleLarge,
+      titleTextStyle: AppTextStyles.headlineMedium,
       contentTextStyle: AppTextStyles.bodyMedium,
     ),
 
@@ -200,16 +212,22 @@ class AppTheme {
     // Switch
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return AppColors.gray50;
+        if (states.contains(WidgetState.disabled)) {
+          return const Color(0xFF4A4A4A); // Disabled thumb
         }
-        return AppColors.gray400;
+        if (states.contains(WidgetState.selected)) {
+          return const Color(0xFFFFFFFF); // ON thumb
+        }
+        return const Color(0xFF6E6E6E); // OFF thumb
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return AppColors.indigo500;
+        if (states.contains(WidgetState.disabled)) {
+          return const Color(0xFF1E1E1E); // Disabled track
         }
-        return AppColors.slate700;
+        if (states.contains(WidgetState.selected)) {
+          return const Color(0xFF6C6FF7); // ON track (primary accent)
+        }
+        return const Color(0xFF2A2A2A); // OFF track
       }),
     ),
 
@@ -283,32 +301,32 @@ class AppTheme {
           primary: AppColors.indigo500,
           primaryContainer: AppColors.indigo900,
           secondary: AppColors.indigo600,
-          secondaryContainer: AppColors.stone200,
+          secondaryContainer: AppColors.gray20,
           surface: AppColors.white,
           error: AppColors.error,
           onPrimary: AppColors.white,
           onSecondary: AppColors.white,
-          onSurface: AppColors.stone900,
+          onSurface: AppColors.black,
           onError: AppColors.white,
-          outline: AppColors.stone200,
+          outline: AppColors.gray20,
           outlineVariant: AppColors.gray400,
         ),
 
-        scaffoldBackgroundColor: AppColors.stone50,
+        scaffoldBackgroundColor: AppColors.white,
 
         // Most component themes inherit from dark theme
         // Only color-specific overrides needed
         appBarTheme: const AppBarTheme(
-          backgroundColor: AppColors.stone50,
-          foregroundColor: AppColors.stone900,
+          backgroundColor: AppColors.white,
+          foregroundColor: AppColors.black,
           elevation: 0,
           centerTitle: false,
           titleTextStyle: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 22,
             height: 1.27,
             fontWeight: FontWeight.w600,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
@@ -326,93 +344,93 @@ class AppTheme {
 
         textTheme: const TextTheme(
           displayLarge: TextStyle(
-            fontFamily: AppTextStyles.displayFont,
+            fontFamily: 'Inter',
             fontSize: 48,
             height: 1.17,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.5,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           displayMedium: TextStyle(
-            fontFamily: AppTextStyles.displayFont,
+            fontFamily: 'Inter',
             fontSize: 36,
             height: 1.22,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.5,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           displaySmall: TextStyle(
-            fontFamily: AppTextStyles.displayFont,
+            fontFamily: 'Inter',
             fontSize: 28,
             height: 1.29,
             fontWeight: FontWeight.w600,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           titleLarge: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 22,
             height: 1.27,
             fontWeight: FontWeight.w600,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           titleMedium: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 18,
             height: 1.33,
             fontWeight: FontWeight.w600,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           titleSmall: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 16,
             height: 1.38,
             fontWeight: FontWeight.w600,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           bodyLarge: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 17,
             height: 1.41,
             fontWeight: FontWeight.w400,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           bodyMedium: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 15,
             height: 1.33,
             fontWeight: FontWeight.w400,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           bodySmall: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 13,
             height: 1.38,
             fontWeight: FontWeight.w400,
-            color: AppColors.gray600,
+            color: AppColors.black,
           ),
           labelLarge: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 14,
             height: 1.43,
             fontWeight: FontWeight.w500,
             letterSpacing: 0.5,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           labelMedium: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 12,
             height: 1.33,
             fontWeight: FontWeight.w500,
             letterSpacing: 0.5,
-            color: AppColors.stone900,
+            color: AppColors.black,
           ),
           labelSmall: TextStyle(
-            fontFamily: AppTextStyles.bodyFont,
+            fontFamily: 'Inter',
             fontSize: 11,
             height: 1.27,
             fontWeight: FontWeight.w500,
             letterSpacing: 0.8,
-            color: AppColors.gray600,
+            color: AppColors.black,
           ),
         ),
 
@@ -421,11 +439,11 @@ class AppTheme {
           fillColor: AppColors.white,
           border: OutlineInputBorder(
             borderRadius: AppSpacing.buttonRadius,
-            borderSide: const BorderSide(color: AppColors.stone200, width: 1),
+            borderSide: const BorderSide(color: AppColors.gray20, width: 1),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: AppSpacing.buttonRadius,
-            borderSide: const BorderSide(color: AppColors.stone200, width: 1),
+            borderSide: const BorderSide(color: AppColors.gray20, width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: AppSpacing.buttonRadius,
@@ -441,7 +459,7 @@ class AppTheme {
         floatingActionButtonTheme: dark.floatingActionButtonTheme,
         iconButtonTheme: dark.iconButtonTheme,
         chipTheme: dark.chipTheme.copyWith(
-          backgroundColor: AppColors.stone200,
+          backgroundColor: AppColors.gray20,
           selectedColor: AppColors.indigo900,
         ),
         dialogTheme: dark.dialogTheme.copyWith(
@@ -457,7 +475,7 @@ class AppTheme {
           ),
         ),
         dividerTheme: const DividerThemeData(
-          color: AppColors.stone200,
+          color: AppColors.gray20,
           thickness: 1,
           space: AppSpacing.md,
         ),

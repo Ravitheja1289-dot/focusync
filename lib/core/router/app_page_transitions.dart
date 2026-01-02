@@ -3,7 +3,11 @@ import '../theme/app_motion.dart';
 
 /// Custom page transitions for Focusync navigation
 ///
-/// All transitions respect the calm motion principles and accessibility settings.
+/// FROZEN MINIMAL MOTION POLICY:
+/// - Fade transitions only (200ms, linear)
+/// - No slide/scale/bounce animations
+/// - All motion communicates state, not delight
+/// - Respects accessibility reduce motion setting
 class AppPageTransitions {
   AppPageTransitions._();
 
@@ -19,11 +23,13 @@ class AppPageTransitions {
   }) {
     return CustomTransitionPage<T>(
       child: child,
-      transitionDuration: duration ?? AppMotion.fast,
-      reverseTransitionDuration: duration ?? AppMotion.fast,
+      transitionDuration: duration ?? AppMotion.normal, // 200ms
+      reverseTransitionDuration: duration ?? AppMotion.normal,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(
-          opacity: CurveTween(curve: AppMotion.calm).animate(animation),
+          opacity: CurveTween(
+            curve: AppMotion.linear,
+          ).animate(animation), // No easing
           child: child,
         );
       },
@@ -41,7 +47,7 @@ class AppPageTransitions {
   }) {
     return CustomTransitionPage<T>(
       child: child,
-      transitionDuration: AppMotion.slow,
+      transitionDuration: AppMotion.normal,
       reverseTransitionDuration: AppMotion.normal,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         final shouldReduce = MediaQuery.of(context).disableAnimations;
@@ -50,13 +56,10 @@ class AppPageTransitions {
           return child;
         }
 
-        final offsetAnimation =
-            Tween<Offset>(
-              begin: const Offset(0.0, 1.0), // Start from bottom
-              end: Offset.zero,
-            ).animate(
-              CurvedAnimation(parent: animation, curve: AppMotion.decelerate),
-            );
+        final offsetAnimation = Tween<Offset>(
+          begin: const Offset(0.0, 1.0), // Start from bottom
+          end: Offset.zero,
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.linear));
 
         final fadeAnimation = Tween<double>(
           begin: 0.0,
@@ -101,7 +104,7 @@ class AppPageTransitions {
               ).animate(
                 CurvedAnimation(
                   parent: secondaryAnimation,
-                  curve: AppMotion.accelerate,
+                  curve: Curves.linear,
                 ),
               );
 
@@ -132,7 +135,7 @@ class AppPageTransitions {
   }) {
     return CustomTransitionPage<T>(
       child: child,
-      transitionDuration: AppMotion.luxurious,
+      transitionDuration: AppMotion.normal,
       reverseTransitionDuration: AppMotion.normal,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         final shouldReduce = MediaQuery.of(context).disableAnimations;
@@ -141,9 +144,10 @@ class AppPageTransitions {
           return child;
         }
 
-        final scaleAnimation = Tween<double>(begin: 0.9, end: 1.0).animate(
-          CurvedAnimation(parent: animation, curve: AppMotion.decelerate),
-        );
+        final scaleAnimation = Tween<double>(
+          begin: 0.9,
+          end: 1.0,
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.linear));
 
         final fadeAnimation = Tween<double>(
           begin: 0.0,
