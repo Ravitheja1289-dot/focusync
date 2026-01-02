@@ -1,7 +1,5 @@
 # Focusync
 
-![Focusync Banner](assets/focusync_banner_1767375332401.png)
-
 <div align="center">
   <img src="assets/app_logo.svg" alt="Focusync Logo" width="120" height="120" />
   
