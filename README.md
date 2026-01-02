@@ -1,5 +1,4 @@
 # Focusync
-
 <div align="center">
   <img src="assets/app_logo.svg" alt="Focusync Logo" width="120" height="120" />
   
