@@ -1,53 +1,172 @@
 # Focusync
 
-> A calm, focused, and psychologically serious productivity app designed to help you maintain deep focus and build consistent work habits.
-
-<p align="center">
-  <strong>Focus better. Track honestly. Improve consistently.</strong>
-</p>
+A minimal focus timer built with Flutter. Calm interface, honest tracking, no gamification.
 
 ---
 
-## 🎯 What is Focusync?
+## Visual Preview
 
-Focusync is a minimalist focus timer and productivity tracker built on scientific principles of attention management. Unlike gamified productivity apps that create artificial pressure through streaks and points, Focusync helps you understand your actual focus patterns and make meaningful improvements.
-
-**Philosophy:**
-- **Psychological seriousness** - Treats focus as a skill to develop, not a game to win
-- **Calm UX** - No bright colors, flashy animations, or anxiety-inducing notifications
-- **Honest tracking** - Detects distractions and helps you understand your patterns
-- **Privacy-first** - All data stays on your device, forever
+Screenshots will be added here once the app reaches visual stability.
 
 ---
 
-## ✨ Key Features
+## Why This App Exists
 
-### 🧘 Immersive Focus Sessions
-- **Fullscreen focus mode** - Eliminates all distractions during work
-- **Multiple intensity levels** - Deep focus, normal, or light sessions
-- **Customizable durations** - From 5 minutes to 2 hours
-- **Pause & resume** - Life happens, we handle it gracefully
+Most productivity apps fail because they optimize for engagement instead of actual work. They add points, streaks, leaderboards, and artificial urgency. The result is another distraction disguised as a tool.
 
-### 📊 Distraction Detection
-- **Automatic tracking** - Detects when you leave the app
-- **Progressive warnings** - Gentle reminders that escalate with frequency
-- **Pattern recognition** - Understand when you get distracted most
-- **No judgment** - Just data to help you improve
+Focusync takes a different approach. It removes everything unnecessary and focuses on what matters: helping you understand your attention patterns and improve them over time. No tricks, no dopamine manipulation, no false productivity theater.
 
-### 🌊 Restorative Breaks
-- **Guided breathing animation** - 4-4-6-2 breathing pattern for calm
-- **Flexible break lengths** - Skip or customize break duration
-- **Auto-start option** - Seamlessly transition from focus to break
+If you want an app that respects your intelligence and your time, this is it.
 
-### 🏆 Session Completion
-- **Celebratory feedback** - Subtle confetti and encouraging messages
-- **Focus quality score** - Based on distraction rate, not arbitrary points
-- **Session insights** - Detailed feedback on your performance
-- **Quick actions** - Start another session, take a break, or review analytics
+---
 
-### 📈 Meaningful Analytics
-- **Daily & weekly trends** - Visualize your focus patterns over time
-- **Focus quality tracking** - Understand not just time, but depth of focus
+## Core Features
+
+**Focus sessions** - Start a timer with clear state transitions. Running, paused, or completed. No ambiguity.
+
+**Quick start durations** - 15, 25, 45 minutes, or custom. Pick one and start immediately.
+
+**Distraction detection** - Tracks when you leave the app during active sessions. Honest data, no judgment.
+
+**Minimal analytics** - Shows total time, session count, and focus quality trends. Nothing more, nothing less.
+
+**Settings** - Control default durations, notification behavior, and theme preferences.
+
+**Account management** - Planned for data portability and cross-device sync. Privacy-respecting by design.
+
+**Offline-first** - Everything works without internet. Data stays on your device.
+
+---
+
+## UX and Product Philosophy
+
+The interface is deliberately minimal. Black, white, and shades of indigo. No bright colors competing for attention.
+
+Each screen has one primary action. When you're on the home screen, you start a session. When you're in a session, you focus. When the session ends, you see results. No nested menus, no hidden features, no confusion.
+
+Visual elements serve clarity, not decoration. Animations exist only when they communicate state changes. Nothing moves just to look modern.
+
+This design creates calm, not dopamine hits. The app gets out of your way so you can do your work.
+
+---
+
+## Architecture and Technical Decisions
+
+The codebase follows a feature-based structure. Each feature owns its domain logic, presentation layer, and state management. No circular dependencies, no hidden coupling.
+
+UI components never contain business logic. They receive state, display it, and emit events. State management lives in dedicated controllers that handle transitions, validation, and side effects.
+
+Services like local storage and notifications are treated as infrastructure. Features depend on interfaces, not implementations. This keeps the architecture flexible and testable.
+
+The separation between what the app does and how it does it is intentional. Business logic can be understood without reading UI code. UI can be changed without touching session management.
+
+See [ARCHITECTURE_DIAGRAM.md](ARCHITECTURE_DIAGRAM.md) for detailed flow diagrams and component relationships.
+
+---
+
+## Analytics Philosophy
+
+The analytics screen shows consistency, not vanity metrics.
+
+It tracks total focused time, session count, average focus quality, and weekly trends. These numbers tell you if you're getting better at sustained attention.
+
+It does not track:
+- Productivity scores based on arbitrary formulas
+- Leaderboards or social comparisons
+- AI-generated insights that restate obvious patterns
+- Gamification points that encourage gaming the system
+
+The goal is understanding, not optimization theater. If you see a drop in focus quality, you know something changed. If you see consistency over weeks, you know the habit is working. That's enough.
+
+---
+
+## Settings and Account Design
+
+Settings are minimal but powerful. Default session durations, notification preferences, theme selection. Everything you need, nothing you don't.
+
+The Account tab represents identity and control. It's where you manage data export, account deletion, and eventually cross-device sync. The philosophy is simple: you own your data, and you decide what happens to it.
+
+No dark patterns, no hidden data collection, no surprise charges. Just clear controls and honest communication about what the app does with your information.
+
+---
+
+## What's Intentionally Not Included
+
+**Social features** - Sharing sessions or competing with friends creates pressure to perform for an audience instead of focusing on actual work.
+
+**Leaderboards** - Ranking users encourages gaming the system and comparing yourself to others instead of improving on your own terms.
+
+**AI productivity scores** - Algorithmic judgments about productivity are often pseudoscientific and create anxiety without actionable insights.
+
+**Heavy animations** - Flashy transitions and motion effects distract from the core experience and drain battery life.
+
+**Push notification spam** - Constant reminders and encouragement messages become noise. The app respects your attention instead of demanding it.
+
+These exclusions aren't oversights. They're design decisions that make the product better by subtraction.
+
+---
+
+## Tech Stack
+
+- Flutter (cross-platform mobile framework)
+- Riverpod (state management with selective rebuilds)
+- GoRouter (declarative navigation)
+- Isar (local database for session persistence)
+- Material Design 3 (dark-first theme system)
+
+Architecture follows Clean Architecture principles with feature-based organization.
+
+---
+
+## Project Status and Roadmap
+
+This is an active project focused on building a solid foundation before adding new features.
+
+Current focus: core session management, distraction detection reliability, and analytics accuracy.
+
+Planned improvements: local data persistence with Isar, account system for data portability, cross-device sync with privacy-preserving backend.
+
+Development is intentionally iterative. Features ship when they're ready, not on arbitrary deadlines.
+
+---
+
+## Getting Started
+
+Clone the repository:
+```bash
+git clone https://github.com/yourusername/focusync.git
+cd focusync
+```
+
+Install dependencies:
+```bash
+flutter pub get
+```
+
+Run the app:
+```bash
+flutter run
+```
+
+No backend configuration required. Everything runs locally.
+
+---
+
+## Security and Privacy Notes
+
+No API keys or secrets are committed to this repository. Environment variables are used for any external service configuration.
+
+User data never leaves the device unless explicitly exported by the user. No analytics tracking, no crash reporting that phones home, no hidden telemetry.
+
+When cross-device sync is implemented, it will be end-to-end encrypted with user-controlled keys. Your data remains yours.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+Built with intention. Maintained with care
 - **Consistency streaks** - Track consecutive days of focused work
 - **Actionable insights** - Specific suggestions based on your data
 
